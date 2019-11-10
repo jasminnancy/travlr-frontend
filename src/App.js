@@ -2,21 +2,42 @@ import React, {Component} from 'react';
 import './App.css';
 import Navigation from './components/Navigation'
 
-
 class App extends Component {
 
   constructor() {
     super()
     this.state = {
       activeTab: window.location.pathname,
+      logInOpen: false,
       activeUser: [],
-      loginModalOpen: false
+      users: []
     }
   }
 
-  handleUserAuth = () => this.setState({ loginOpen: true})
-  handleConfirm = () => this.setState({ loginOpen: false })
-  handleCancel = () => this.setState({ loginOpen: false })
+  componentDidMount () {
+    fetch('http://localhost:9292/users')
+    .then(resp => resp.json())
+    .then(data => {
+      this.setState({
+        users: data
+      })
+    })
+  }
+
+  handleUserAuth = () => {
+    this.setState({ 
+      logInOpen: true
+    })
+  }
+
+  logIn = (e) => {
+    e.preventDefault()
+
+    this.setState({ 
+      activeUser: this.state.users[0], 
+      logInOpen: false 
+    })
+  }
 
   render () {
     return (
@@ -25,7 +46,9 @@ class App extends Component {
           activeTab={this.state.activeTab} 
           activeUser={this.state.activeUser}
           handleUserAuth={this.handleUserAuth}
-          loginModalOpen={this.state.loginModalOpen}
+          logInOpen={this.state.logInOpen}
+          exit={this.exit}
+          logIn={this.logIn}
         />
       </div>
     );

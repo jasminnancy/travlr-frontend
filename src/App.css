@@ -1,5 +1,6 @@
 .navigation {
     margin: 25px;
+    margin-top: 5px;
 }
 
 .logo-text {
@@ -11,4 +12,13 @@
     margin: 60px;
     margin-bottom: 80px;
     margin-top: 40px;
+}
+
+.centered-body {
+    text-align: center;
+}
+
+.main-image {
+    width: 98%;
+    margin-bottom: 25px;
 }

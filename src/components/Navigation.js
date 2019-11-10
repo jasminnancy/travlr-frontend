@@ -37,29 +37,49 @@ const Navigation = (props) => {
 
                 <Menu.Menu position='right'>
                     <Menu.Item onClick={props.handleUserAuth}>
-                        <Modal 
-                            size='tiny' 
-                            dimmer='blurring'
-                            trigger={<Button basic>{props.activeUser.length > 0 ? 'Log Out' : 'Log In'}</Button>}
-                        >
-                            <Modal.Header><Icon name='user'/> Log-in to Your Account</Modal.Header>
-                            <Form size='small' className='log-in'>
-                                <Form.Input fluid label='Username' placeholder='Username' />
-                                <Form.Input fluid type='password' label='Password' placeholder='Password' />
-                                <Button floated='right' size='medium' type='submit'>Log-in</Button>
-                            </Form>
-
-                            <NestedModal/>
-                        </Modal>
+                        <LogInModal 
+                            logInOpen={props.logInOpen}
+                            activeUser={props.activeUser}
+                            logIn={props.logIn}
+                        />
                     </Menu.Item>
                 </Menu.Menu>
             </Menu>
 
-            <Route exact path="/" render={() => <Home activeUser={props.activeUser} />} />
-            <Route exact path="/trips" render={() => <Trips activeUser={props.activeUser} />} />
-            <Route exact path="/luggage" render={() => <Luggage activeUser={props.activeUser} />} />
+            <div className='centered-body'>
+                <Route exact path="/" render={() => <Home activeUser={props.activeUser} />} />
+                <Route exact path="/trips" render={() => <Trips activeUser={props.activeUser} />} />
+                <Route exact path="/luggage" render={() => <Luggage activeUser={props.activeUser} />} />
+            </div>
         </div>
         </Router>
+    )
+}
+
+const LogInModal = (props) => {
+    return (
+        <Modal 
+            open={props.logInOpen}
+            size='tiny' 
+            dimmer='blurring'
+            trigger={<Button basic>{props.activeUser.length > 0 ? 'Log Out' : 'Log In/Sign Up'}</Button>}
+        >
+            <Modal.Header>
+                <Icon name='user'/> 
+                Log-in to Your Account
+            </Modal.Header>
+            <Form 
+                size='small' 
+                className='log-in'
+                onSubmit={(e) => props.logIn(e)}
+            >
+                <Form.Input fluid label='Username' placeholder='Username' />
+                <Form.Input fluid type='password' label='Password' placeholder='Password' />
+                <Button floated='right' size='medium' type='submit'>Log-in</Button>
+            </Form>
+
+            <NestedModal logIn={props.logIn}/>
+        </Modal>
     )
 }
 
@@ -90,7 +110,10 @@ class NestedModal extends React.Component {
                 >
                     <Modal.Header ><Icon name='user'/> Create Your Account</Modal.Header>
                     <Modal.Content>
-                        <Form className='log-in'>
+                        <Form 
+                            className='log-in'
+                            onSubmit={(e) => this.props.logIn(e)}
+                        >
                             <Form.Input label='Username' placeholder='Username'/>
                             <Form.Input type='password' label='Password' placeholder='Password'/>
                             <Form.Group widths='equal'>
