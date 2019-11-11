@@ -1,10 +1,27 @@
 import React from 'react'
+import { Segment } from 'semantic-ui-react'
 
-const Luggage = () => {
+const Luggage = (props) => {
     return (
         <div>
-            My Luggages
+            {props.activeUser.username ? <LoggedIn activeUser={props.activeUser}/> : <BasicPage />}
         </div>
+    )
+}
+
+const LoggedIn = () => {
+    return (
+        <div>
+            logged in
+        </div>
+    )
+}
+
+const BasicPage = () => {
+    return (
+        <Segment>
+            
+        </Segment>
     )
 }
 

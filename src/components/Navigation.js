@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Header, Icon, Modal, Button, Form } from 'semantic-ui-react'
+import { Menu, Header, Icon, Modal, Button, Form, Container, Grid } from 'semantic-ui-react'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './Home'
 import Trips from './Trips'
@@ -11,11 +11,11 @@ const Navigation = (props) => {
         <div className='navigation'>
             <Menu pointing secondary size='massive'>
                 <Menu.Item href='/'>
-                    <Header as='h2'>
-                        <Icon name='map signs'/>
-                        <Header.Content className='icon'>
+                    <Header as='h2' >
+                        <Icon name='map signs' color='brown'/>
+                        <Header.Content className='icon' >
                             Travlr
-                            <Header.Subheader><p className='logo-text'>Let's go explore</p></Header.Subheader>
+                            <Header.Subheader><p>Let's go explore</p></Header.Subheader>
                         </Header.Content>
                     </Header>
                 </Menu.Item>
@@ -37,20 +37,24 @@ const Navigation = (props) => {
 
                 <Menu.Menu position='right'>
                     <Menu.Item onClick={props.handleUserAuth}>
-                        <LogInModal 
-                            logInOpen={props.logInOpen}
-                            activeUser={props.activeUser}
-                            logIn={props.logIn}
-                        />
+                        {!props.activeUser.username 
+                            ? <LogInModal 
+                                logInOpen={props.logInOpen}
+                                activeUser={props.activeUser}
+                                logIn={props.logIn}
+                            />
+                                : <Button onClick={logOut}>Log Out</Button>
+                    }
                     </Menu.Item>
                 </Menu.Menu>
             </Menu>
 
             <div className='centered-body'>
                 <Route exact path="/" render={() => <Home activeUser={props.activeUser} />} />
-                <Route exact path="/trips" render={() => <Trips activeUser={props.activeUser} />} />
+                <Route exact path="/trips" render={() => <Trips handleAddedTrip={props.handleAddedTrip} activeUser={props.activeUser} addNewTrip={props.addNewTrip}/>} />
                 <Route exact path="/luggage" render={() => <Luggage activeUser={props.activeUser} />} />
             </div>
+            <Footer />
         </div>
         </Router>
     )
@@ -62,7 +66,7 @@ const LogInModal = (props) => {
             open={props.logInOpen}
             size='tiny' 
             dimmer='blurring'
-            trigger={<Button basic>{props.activeUser.length > 0 ? 'Log Out' : 'Log In/Sign Up'}</Button>}
+            trigger={<Button basic>Log In/Sign Up</Button>}
         >
             <Modal.Header>
                 <Icon name='user'/> 
@@ -129,6 +133,26 @@ class NestedModal extends React.Component {
             </div>
         )
     }
+}
+
+const logOut = () => {
+    localStorage.clear()
+    document.location.reload()
+}
+
+const Footer = () => {
+    return (
+        <Container fluid className='footer'>
+            <Grid columns={2} relaxed='very'>
+                <Grid.Column>
+                    © 2019 by Alexandria Pugia
+                </Grid.Column>
+                <Grid.Column textAlign='right'>
+                    Proudly made for Flatiron School
+                </Grid.Column>
+            </Grid>
+        </Container>
+    )
 }
 
 export default Navigation

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './App.css';
 import Navigation from './components/Navigation'
 
+const URL_USERS = 'http://localhost:9292/users'
+
 class App extends Component {
 
   constructor() {
@@ -15,18 +17,37 @@ class App extends Component {
   }
 
   componentDidMount () {
-    fetch('http://localhost:9292/users')
+    fetch(URL_USERS)
     .then(resp => resp.json())
     .then(data => {
       this.setState({
         users: data
       })
     })
+    
+    if (localStorage.getItem('current_user_id')) {
+      fetch(URL_USERS + '/' + localStorage.getItem('current_user_id'))
+      .then(resp => resp.json())
+      .then(data => {
+        this.setState({
+          activeUser: data
+        })
+      })
+    }
   }
 
   handleUserAuth = () => {
     this.setState({ 
       logInOpen: true
+    })
+  }
+
+  handleAddedTrip = (trip) => {
+    let trips = [...this.state.activeUser.trips]
+    trips.push(trip)
+
+    this.setState({
+      activeUser: {...this.state.activeUser, trips: trips}
     })
   }
 
@@ -36,7 +57,7 @@ class App extends Component {
     this.setState({ 
       activeUser: this.state.users[0], 
       logInOpen: false 
-    })
+    }, () => localStorage.setItem('current_user_id', `${this.state.activeUser.id}`))
   }
 
   render () {
@@ -46,6 +67,7 @@ class App extends Component {
           activeTab={this.state.activeTab} 
           activeUser={this.state.activeUser}
           handleUserAuth={this.handleUserAuth}
+          handleAddedTrip={this.handleAddedTrip}
           logInOpen={this.state.logInOpen}
           exit={this.exit}
           logIn={this.logIn}

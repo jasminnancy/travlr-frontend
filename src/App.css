@@ -18,7 +18,28 @@
     text-align: center;
 }
 
-.main-image {
+.double-centered {
+    display: inline-block;
+}
+
+.main-body {
     width: 98%;
     margin-bottom: 25px;
+}
+
+.footer {
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+.trip-description {
+    height: 75%;
+}
+
+.trip-details {
+    height: 100%;
+}
+
+.padding {
+    padding-left: 20px;
 }
