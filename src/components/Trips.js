@@ -1,6 +1,5 @@
 import React from 'react'
 import Sidebar from './Sidebar'
-import NewTrip from './NewTrip'
 import SingleTrip from './SingleTrip'
 import SingleTripDetails from './SingleTripDetails'
 import Mountains from '../photos/mountains.jpg'
@@ -9,7 +8,7 @@ import Boys from '../photos/boys.jpg'
 import Milan from '../photos/italy.jpg'
 import Panama from '../photos/panama.jpg'
 import DefaultTripPhoto from '../photos/default-trip-photo.jpg'
-import { Grid, Dimmer, Segment, Icon, Header } from 'semantic-ui-react'
+import { Grid, Dimmer, Segment, Icon, Header, Button } from 'semantic-ui-react'
 
 const TRIP_URL = 'http://localhost:9292/trips'
 
@@ -28,7 +27,7 @@ class Trips extends React.Component {
             body: JSON.stringify({
                 user_id: user.id,
                 title: 'My New Trip',
-                description: 'Add your description here...',
+                description: '',
                 budget: 0,
                 photo: DefaultTripPhoto,
                 start_date: "No Start Date",
@@ -44,8 +43,12 @@ class Trips extends React.Component {
     }
 
     handleTripClick = (trip) => {
-        this.setState({
-            selectedTrip: trip
+        fetch(TRIP_URL + `/${trip.id}`)
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                selectedTrip: data
+            })
         })
     }
 
@@ -59,12 +62,12 @@ class Trips extends React.Component {
         return (
             <div>
                 {this.props.activeUser.username 
-                    ? <LoggedIn activeUser={this.props.activeUser} 
-                                addNewTrip={this.addNewTrip}
-                                handleTripClick={this.handleTripClick}
-                                handleBackClick={this.handleBackClick}
-                                selectedTrip={this.state.selectedTrip}
-                        /> 
+                    ? <LoggedIn 
+                        activeUser={this.props.activeUser} 
+                        addNewTrip={this.addNewTrip}
+                        handleTripClick={this.handleTripClick}
+                        handleBackClick={this.handleBackClick}
+                        selectedTrip={this.state.selectedTrip}/> 
                         : <BasicPage activeUser={activeUser}/>}
             </div>
         )
@@ -88,12 +91,16 @@ const LoggedIn = (props) => {
                             : <SingleTripDetails 
                                 trip={props.selectedTrip}
                                 handleBackClick={props.handleBackClick}
-                            />
-                }
-                    
+                            />}
                 </Grid.Column>
             </Grid>
         </div>
+    )
+}
+
+const NewTrip = (props) => {
+    return (
+        <Button fluid onClick={() => props.addNewTrip(props.activeUser)} content='Create a New Trip' />
     )
 }
 
