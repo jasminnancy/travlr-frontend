@@ -24,7 +24,7 @@ const LoggedIn = (props) => {
 const BasicPage = (props) => {
     return (
         <div>
-            <img className='main-body' src={MainImage} alt='map'/>
+            <Image className='main-body' src={MainImage} alt='map'/>
             
             <Statistic.Group widths='four'>
                 <Statistic>

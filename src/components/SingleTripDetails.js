@@ -1,8 +1,12 @@
 import React from 'react'
-import { Button, Card, Grid, Image, Message, List } from 'semantic-ui-react'
+import TransportTiny from './TransportTiny'
+import HotelTiny from './HotelTiny'
+import PlaceTiny from './PlaceTiny'
+import EventTiny from './EventTiny'
+import BagTiny from './BagTiny'
+import { Button, Card, Grid, Image, Message, List, Icon } from 'semantic-ui-react'
 
 const SingleTripDetails = (props) => {
-    console.log(props)
     return (
         <div>
             <Button fluid onClick={props.handleBackClick}>
@@ -19,6 +23,7 @@ const SingleTripDetails = (props) => {
                                 </Grid.Column>
                                 <Grid.Column width={4}/>
                             </Grid.Row>
+
                             <Grid.Row textAlign='left'>
                                 <Grid.Column width={11} >
                                     <Message 
@@ -61,11 +66,72 @@ const SingleTripDetails = (props) => {
                                     </List>
                                 </Grid.Column>
                             </Grid.Row>
+
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <Message>
+                                        <AddButton/>
+                                        <Message.Header content='Flights/Transportation'/>
+                                        {props.trip.transportations.length > 0 ? props.trip.transportations.map(transport => <TransportTiny />) : <br/> }
+                                    </Message>
+                                </Grid.Column>
+
+                                <Grid.Column >
+                                    <Message>
+                                        <AddButton />
+                                        <Message.Header content='Hotels'/>
+                                        {props.trip.hotels.length > 0 ? props.trip.hotels.map(hotel => <HotelTiny />) : <br/> }
+                                    </Message>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                            <Grid.Row columns={3}>
+                                <Grid.Column >
+                                    <Message>
+                                        <AddButton />
+                                        <Message.Header content='Places'/>
+                                        {props.trip.places.length > 0 ? props.trip.places.map(hotel => <PlaceTiny />) : <br/> }
+                                    </Message>
+                                </Grid.Column>
+
+                                <Grid.Column >
+                                    <Message>
+                                        <AddButton />
+                                        <Message.Header content='Events'/>
+                                        {props.trip.events.length > 0 ? props.trip.events.map(hotel => <EventTiny />) : <br/> }
+                                    </Message>
+                                </Grid.Column>
+
+                                <Grid.Column >
+                                    <Message>
+                                        <AddButton />
+                                        <Message.Header content='Bags'/>
+                                        {props.trip.carryons.length > 0 ? props.trip.carryons.map(hotel => <BagTiny />) : <br/> }
+                                    </Message>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                            <Grid.Row>
+                                <Grid.Column width={16}>
+                                    <List divided horizontal>
+                                        <List.Item>Edit Trip Info</List.Item>
+                                        <List.Item>Delete</List.Item>
+                                    </List>
+                                </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                     </Card.Content>
                 </Card>
             </Card.Group>
         </div>
+    )
+}
+
+const AddButton = () => {
+    return (
+        <Button icon compact fitted basic floated='left' size='mini'>
+            <Icon name='plus'/>
+        </Button>
     )
 }
 

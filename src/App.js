@@ -51,6 +51,15 @@ class App extends Component {
     })
   }
 
+  handleAddedBag = (bag) => {
+    let bags = [...this.state.activeUser.luggages]
+    bags.push(bag)
+
+    this.setState({
+      activeUser: {...this.state.activeUser, luggages: bags}
+    })
+  }
+
   logIn = (e) => {
     e.preventDefault()
 
@@ -68,6 +77,7 @@ class App extends Component {
           activeUser={this.state.activeUser}
           handleUserAuth={this.handleUserAuth}
           handleAddedTrip={this.handleAddedTrip}
+          handleAddedBag={this.handleAddedBag}
           logInOpen={this.state.logInOpen}
           exit={this.exit}
           logIn={this.logIn}

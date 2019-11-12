@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Image, Grid, List, Message } from 'semantic-ui-react'
 
 const SingleTrip = (props) => {
-    return(
+    return (
         <Card.Group>
             <Card fluid onClick={() => props.handleTripClick(props.trip)}>
                 <Card.Content>

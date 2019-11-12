@@ -52,7 +52,7 @@ const Navigation = (props) => {
             <div className='centered-body'>
                 <Route exact path="/" render={() => <Home activeUser={props.activeUser} />} />
                 <Route exact path="/trips" render={() => <Trips handleAddedTrip={props.handleAddedTrip} activeUser={props.activeUser} addNewTrip={props.addNewTrip}/>} />
-                <Route exact path="/luggage" render={() => <Luggage activeUser={props.activeUser} />} />
+                <Route exact path="/luggage" render={() => <Luggage handleAddedBag={props.handleAddedBag} activeUser={props.activeUser} />} />
             </div>
             <Footer />
         </div>
