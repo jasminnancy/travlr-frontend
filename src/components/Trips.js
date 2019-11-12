@@ -3,10 +3,8 @@ import Sidebar from './Sidebar'
 import SingleTrip from './SingleTrip'
 import SingleTripDetails from './SingleTripDetails'
 import Mountains from '../photos/mountains.jpg'
-import NYC from '../photos/nyc.png'
 import Boys from '../photos/boys.jpg'
 import Milan from '../photos/italy.jpg'
-import Panama from '../photos/panama.jpg'
 import DefaultTripPhoto from '../photos/default-trip-photo.jpg'
 import { Grid, Dimmer, Segment, Icon, Header, Button } from 'semantic-ui-react'
 
@@ -27,7 +25,7 @@ class Trips extends React.Component {
             body: JSON.stringify({
                 user_id: user.id,
                 title: 'My New Trip',
-                description: '',
+                description: 'No Description Added...',
                 budget: 0,
                 photo: DefaultTripPhoto,
                 start_date: "No Start Date",
@@ -58,6 +56,45 @@ class Trips extends React.Component {
         })
     }
 
+    handleTripEditClick = (trip, values) => {
+        debugger
+        fetch(TRIP_URL + `/${trip.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                title: values.title,
+                description: values.description,
+                budget: values.budget,
+                start_date: values.start_date,
+                end_date: values.end_date,
+                photo: values.photo
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                selectedTrip: data
+            })
+            alert('Your trip has been updated!')
+        })
+    }
+
+    handleDeleteClick = (e, trip) => {
+        e.preventDefault()
+
+        fetch(TRIP_URL + `/${trip.id}`, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json(), this.props.handleRemovedTrip(trip))
+
+        this.setState({
+            selectedTrip: []
+        })
+    }
+
     render () {
         return (
             <div>
@@ -67,6 +104,8 @@ class Trips extends React.Component {
                         addNewTrip={this.addNewTrip}
                         handleTripClick={this.handleTripClick}
                         handleBackClick={this.handleBackClick}
+                        handleTripEditClick={this.handleTripEditClick}
+                        handleDeleteClick={this.handleDeleteClick}
                         selectedTrip={this.state.selectedTrip}/> 
                         : <BasicPage activeUser={activeUser}/>}
             </div>
@@ -91,6 +130,8 @@ const LoggedIn = (props) => {
                             : <SingleTripDetails 
                                 trip={props.selectedTrip}
                                 handleBackClick={props.handleBackClick}
+                                handleTripEditClick={props.handleTripEditClick}
+                                handleDeleteClick={props.handleDeleteClick}
                             />}
                 </Grid.Column>
             </Grid>
@@ -112,7 +153,7 @@ const TripContainer = (props) => {
                 addNewTrip={props.addNewTrip}
             /> 
             <br/>
-            {props.activeUser.trips.map(trip => <SingleTrip handleTripClick={props.handleTripClick} key={trip.id} trip={trip}/>)}
+            {props.activeUser.trips.map(trip => <SingleTrip key={trip.id} handleTripClick={props.handleTripClick} trip={trip}/>)}
         </div>
     )
 }
@@ -135,7 +176,7 @@ const BasicPage = (props) => {
                 <Dimmer active={true}>
                     <Header inverted as='h2' icon>
                         <Icon name='heart' /> 
-                        Create an account to access this feature!
+                        Log in or create an account to access this feature!
                     </Header>
                 </Dimmer>
             </Dimmer.Dimmable>
@@ -159,16 +200,6 @@ const activeUser = {
                 end_date: "04/18/2020"
             },
             {
-                id: 2,
-                title: "NYC", 
-                miles: 3250, 
-                photo: NYC, 
-                budget: 800, 
-                description: "Time to go to NYC to see the sights! Don't forget to get an MTA card.",
-                start_date: "08/02/2020", 
-                end_date: "08/12/2020"
-            }, 
-            {
                 id: 3,
                 title: "Boy's Trip", 
                 miles: 800, 
@@ -188,18 +219,8 @@ const activeUser = {
                 start_date: "12/07/2019", 
                 end_date: "12/18/2019"
             }, 
-            {
-                id: 5,
-                title: "Panama City Beach", 
-                miles: 250, 
-                photo: Panama, 
-                budget: 350, 
-                description: "If I don't get burned at least once, I'm not doing it right.",
-                start_date: "05/01/2020", 
-                end_date: "05/14/2020"
-            }
         ],
-        luggages: ["suitcase", "backpack"]
+        luggages: ["1", "2", "3", "4", "5"]
     }
 
 export default Trips

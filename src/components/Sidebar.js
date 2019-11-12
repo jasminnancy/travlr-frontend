@@ -8,7 +8,11 @@ const Sidebar = (props) => {
     return (
             <Menu vertical fluid>
                 <Card>
-                    <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
+                    <Image 
+                        src={!props.activeUser.profile_pic 
+                            ? 'https://react.semantic-ui.com/images/avatar/large/molly.png' 
+                                : props.activeUser.profile_pic} 
+                        wrapped ui={false} />
                     <Card.Content>
                     <Card.Header>{props.activeUser.username}</Card.Header>
                     <Card.Meta>

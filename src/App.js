@@ -10,21 +10,12 @@ class App extends Component {
     super()
     this.state = {
       activeTab: window.location.pathname,
-      logInOpen: false,
       activeUser: [],
       users: []
     }
   }
 
   componentDidMount () {
-    fetch(URL_USERS)
-    .then(resp => resp.json())
-    .then(data => {
-      this.setState({
-        users: data
-      })
-    })
-    
     if (localStorage.getItem('current_user_id')) {
       fetch(URL_USERS + '/' + localStorage.getItem('current_user_id'))
       .then(resp => resp.json())
@@ -34,11 +25,13 @@ class App extends Component {
         })
       })
     }
-  }
 
-  handleUserAuth = () => {
-    this.setState({ 
-      logInOpen: true
+    fetch(URL_USERS)
+    .then(resp => resp.json())
+    .then(data => {
+      this.setState({
+        users: data
+      })
     })
   }
 
@@ -51,6 +44,15 @@ class App extends Component {
     })
   }
 
+  handleRemovedTrip = (removedTrip) => {
+    let trips = [...this.state.activeUser.trips]
+    let updatedTrips = trips.filter(trip => trip.id !== removedTrip.id)
+
+    this.setState({
+      activeUser: {...this.state.activeUser, trips: updatedTrips}
+    })
+  }
+
   handleAddedBag = (bag) => {
     let bags = [...this.state.activeUser.luggages]
     bags.push(bag)
@@ -60,12 +62,20 @@ class App extends Component {
     })
   }
 
+  handleRemovedBag = (removedBag) => {
+    let bags = [...this.state.activeUser.luggages]
+    let updatedBags = bags.filter(trip => trip.id !== removedBag.id)
+
+    this.setState({
+      activeUser: {...this.state.activeUser, luggages: updatedBags}
+    })
+  }
+
   logIn = (e) => {
     e.preventDefault()
 
     this.setState({ 
       activeUser: this.state.users[0], 
-      logInOpen: false 
     }, () => localStorage.setItem('current_user_id', `${this.state.activeUser.id}`))
   }
 
@@ -77,10 +87,11 @@ class App extends Component {
           activeUser={this.state.activeUser}
           handleUserAuth={this.handleUserAuth}
           handleAddedTrip={this.handleAddedTrip}
+          handleRemovedTrip={this.handleRemovedTrip}
           handleAddedBag={this.handleAddedBag}
-          logInOpen={this.state.logInOpen}
-          exit={this.exit}
+          handleRemovedBag={this.handleRemovedBag}
           logIn={this.logIn}
+          exit={this.exit}
         />
       </div>
     );

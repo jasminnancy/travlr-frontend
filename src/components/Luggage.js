@@ -1,11 +1,20 @@
 import React from 'react'
 import Sidebar from './Sidebar'
 import SingleBag from './SingleBag'
+import SingleBagDetails from './SingleBagDetails'
 import { Grid, Button, Card, Dimmer, Segment, Header, Icon } from 'semantic-ui-react'
 
 const BAG_URL = 'http://localhost:9292/luggages'
 
 class Luggage extends React.Component {
+    constructor () {
+        super()
+
+        this.state = {
+            selectedBag: []
+        }
+    }
+
     addNewBag = (user) => {
         debugger
         fetch(BAG_URL, {
@@ -13,7 +22,8 @@ class Luggage extends React.Component {
             body: JSON.stringify({
                 user_id: user.id,
                 miles_travelled: 0,
-                name: 'Untitled'
+                name: 'Untitled',
+                luggage_type: 'suitcase'
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -24,14 +34,71 @@ class Luggage extends React.Component {
         .then(data => this.props.handleAddedBag(data))
     }
 
+    handleBagClick = (bag) => {
+        fetch(BAG_URL + `/${bag.id}`)
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                selectedBag: data
+            })
+        })
+    }
+
+    handleBackClick = () => {
+        this.setState({
+            selectedBag: []
+        })
+    }
+
+    handleBagEditClick = (bag, values) => {
+        fetch(BAG_URL + `/${bag.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: values.name,
+                size: values.size,
+                luggage_type: values.luggage_type
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                selectedBag: data
+            })
+            alert('Your bag has been updated!')
+        })
+    }
+
+    handleDeleteClick = (e, bag) => {
+        e.preventDefault()
+
+        fetch(BAG_URL + `/${bag.id}`, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json(), this.props.handleRemovedBag(bag))
+        .then(data => console.log(data))
+
+        this.setState({
+            selectedBag: []
+        })
+    }
+
     render () {
         return (
             <div>
                 {this.props.activeUser.username 
                     ? <LoggedIn 
                         activeUser={this.props.activeUser}
-                        addNewBag={this.addNewBag}/> 
-                        : <BasicPage />}
+                        addNewBag={this.addNewBag}
+                        handleBagClick={this.handleBagClick}
+                        handleBackClick={this.handleBackClick}
+                        handleBagEditClick={this.handleBagEditClick}
+                        handleDeleteClick={this.handleDeleteClick}
+                        selectedBag={this.state.selectedBag}/> 
+                        : <BasicPage activeUser={activeUser}/>}
             </div>
         )
     }
@@ -45,10 +112,18 @@ const LoggedIn = (props) => {
                     <Sidebar activeUser={props.activeUser}/>
                 </Grid.Column>  
                 <Grid.Column width={12}>
-                    <BagsContainer 
-                        activeUser={props.activeUser}
-                        addNewBag={props.addNewBag}
-                    />
+                    {!props.selectedBag.id
+                        ? <BagsContainer 
+                            activeUser={props.activeUser}
+                            addNewBag={props.addNewBag}
+                            handleBagClick={props.handleBagClick}
+                        />
+                        : <SingleBagDetails 
+                            bag={props.selectedBag}
+                            handleBackClick={props.handleBackClick}
+                            handleBagEditClick={props.handleBagEditClick}
+                            handleDeleteClick={props.handleDeleteClick}
+                        />}
                 </Grid.Column>
             </Grid>
         </div>
@@ -70,13 +145,13 @@ const BagsContainer = (props) => {
             /> 
             <br/>
             <Card.Group itemsPerRow={2}>
-                {props.activeUser.luggages.map(bag => <SingleBag handleTripClick={props.handleBagClick} key={bag.id} bag={bag}/>)}
+                {props.activeUser.luggages.map(bag => <SingleBag handleBagClick={props.handleBagClick} bag={bag}/>)}
             </Card.Group>
         </div>
     )
 }
 
-const BasicPage = () => {
+const BasicPage = (props) => {
     return (
         <div className='main-body double-centered'>
             <Dimmer.Dimmable as={Segment}>
@@ -86,7 +161,7 @@ const BasicPage = () => {
                     </Grid.Column>  
                     <Grid.Column width={12}>
                         <BagsContainer 
-                            activeUser={activeUser}
+                            activeUser={props.activeUser}
                         />
                     </Grid.Column>
                 </Grid>
@@ -94,7 +169,7 @@ const BasicPage = () => {
                 <Dimmer active={true}>
                     <Header inverted as='h2' icon>
                         <Icon name='heart' /> 
-                        Create an account to access this feature!
+                        Log in or create an account to access this feature!
                     </Header>
                 </Dimmer>
             </Dimmer.Dimmable>
@@ -110,7 +185,7 @@ const activeUser = {
             {
                 id: 1,
                 title: "The Mountains", 
-                miles: 11200, 
+                miles: 7700, 
                 budget: 400, 
                 description: "Just a trip to the mountains with my friends! Can't wait to go skiing.",
                 start_date: "04/15/2020", 
@@ -122,7 +197,7 @@ const activeUser = {
             id: 1,
             user_id: 1,
             luggage_type: "backpack",
-            size: null,
+            size: 26,
             miles_travelled: 600,
             name: "The South Face"
         },
@@ -130,14 +205,14 @@ const activeUser = {
             id: 1,
             user_id: 1,
             luggage_type: "carry_on",
-            size: null,
+            size: 39,
             miles_travelled: 340,
             name: "Yellow Small Suitcase"
         },{
             id: 1,
             user_id: 1,
             luggage_type: "suitcase",
-            size: null,
+            size: 70,
             miles_travelled: 285,
             name: "Rollie Rollie Rollie"
         },
@@ -145,7 +220,7 @@ const activeUser = {
             id: 1,
             user_id: 1,
             luggage_type: "suitcase",
-            size: null,
+            size: 100,
             miles_travelled: 2000,
             name: "Ol' Reliable"
         },
@@ -153,7 +228,7 @@ const activeUser = {
             id: 1,
             user_id: 1,
             luggage_type: "carry_on",
-            size: null,
+            size: 42,
             miles_travelled: 430,
             name: "Perfect For Snacks"
         }
