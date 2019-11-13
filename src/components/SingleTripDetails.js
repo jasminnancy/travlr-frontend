@@ -51,7 +51,7 @@ const SingleTripDetails = (props) => {
                                                     color='black' 
                                                     name='sign in' 
                                                     size='large' 
-                                                /> {props.trip.start_date}
+                                                /> {props.formatDate(props.trip.start_date)}
                                             </div>
                                         </List.Item>
                                         <List.Item>
@@ -60,7 +60,7 @@ const SingleTripDetails = (props) => {
                                                     color='black' 
                                                     name='sign out' 
                                                     size='large' 
-                                                /> {props.trip.end_date}
+                                                /> {props.formatDate(props.trip.end_date)}
                                             </div>
                                         </List.Item>
                                     </List>
@@ -70,17 +70,42 @@ const SingleTripDetails = (props) => {
                             <Grid.Row columns={2}>
                                 <Grid.Column>
                                     <Message>
-                                        <AddButton/>
+                                        <AddButton 
+                                            trip={props.trip} 
+                                            name='transportations' 
+                                            handleTripUpdatedEvents={props.handleTripUpdatedEvents}/>
                                         <Message.Header content='Flights/Transportation'/>
-                                        {props.trip.transportations.length > 0 ? props.trip.transportations.map(transport => <TransportTiny key={transport.id}/>) : <br/> }
+                                        {props.trip.transportations.length > 0 
+                                            ? props.trip.transportations.map(transport => <TransportTiny 
+                                                                                            key={transport.id} 
+                                                                                            transport={transport} 
+                                                                                            transportEdit={props.transportEdit} 
+                                                                                            handleDeletedTransport={props.handleDeletedTransport}
+                                                                                            formatTime={props.formatTime}
+                                                                                            formatDate={props.formatDate}
+                                                                                        />) 
+                                                : <br/> }
                                     </Message>
                                 </Grid.Column>
 
                                 <Grid.Column >
                                     <Message>
-                                        <AddButton trip={props.trip}/>
+                                        <AddButton 
+                                            trip={props.trip} 
+                                            name='hotels' 
+                                            handleTripUpdatedEvents={props.handleTripUpdatedEvents}
+                                        />
                                         <Message.Header content='Hotels'/>
-                                        {props.trip.hotels.length > 0 ? props.trip.hotels.map(hotel => <HotelTiny key={hotel.id}/>) : <br/> }
+                                        {props.trip.hotels.length > 0 
+                                            ? props.trip.hotels.map(hotel => <HotelTiny 
+                                                                                key={hotel.id} 
+                                                                                hotel={hotel}
+                                                                                hotelEdit={props.hotelEdit}
+                                                                                handleDeletedHotel={props.handleDeletedHotel}
+                                                                                formatTime={props.formatTime}
+                                                                                formatDate={props.formatDate}
+                                                                            />) 
+                                                : <br/> }
                                     </Message>
                                 </Grid.Column>
                             </Grid.Row>
@@ -88,25 +113,58 @@ const SingleTripDetails = (props) => {
                             <Grid.Row columns={3}>
                                 <Grid.Column >
                                     <Message>
-                                        <AddButton />
+                                        <AddButton 
+                                            trip={props.trip} 
+                                            name='places' 
+                                            handleTripUpdatedEvents={props.handleTripUpdatedEvents}
+                                        />
                                         <Message.Header content='Places'/>
-                                        {props.trip.places.length > 0 ? props.trip.places.map(place => <PlaceTiny key={place.id}/>) : <br/> }
+                                        {props.trip.places.length > 0 
+                                            ? props.trip.places.map(place => <PlaceTiny 
+                                                                                key={place.id} 
+                                                                                place={place}
+                                                                                placeEdit={props.placeEdit}
+                                                                                handleDeletedPlace={props.handleDeletedPlace}
+                                                                                formatTime={props.formatTime}
+                                                                            />) 
+                                                : <br/> }
                                     </Message>
                                 </Grid.Column>
 
                                 <Grid.Column >
                                     <Message>
-                                        <AddButton />
+                                        <AddButton 
+                                            trip={props.trip} 
+                                            name='events' 
+                                            handleTripUpdatedEvents={props.handleTripUpdatedEvents}
+                                        />
                                         <Message.Header content='Events'/>
-                                        {props.trip.events.length > 0 ? props.trip.events.map(event => <EventTiny key={event.id}/>) : <br/> }
+                                        {props.trip.events.length > 0 
+                                            ? props.trip.events.map(event => <EventTiny 
+                                                                                key={event.id} 
+                                                                                event={event}
+                                                                                eventEdit={props.eventEdit}
+                                                                                handleDeletedEvent={props.handleDeletedEvent}
+                                                                                formatTime={props.formatTime}
+                                                                            />) 
+                                                : <br/> }
                                     </Message>
                                 </Grid.Column>
 
                                 <Grid.Column >
                                     <Message>
-                                        <AddButton />
-                                        <Message.Header content='Bags'/>
-                                        {props.trip.carryons.length > 0 ? props.trip.carryons.map(bag => <BagTiny key={bag.id} bag={bag}/>) : <br/> }
+                                        <AddBagButton 
+                                            trip={props.trip}
+                                            name='carryons'
+                                            handleTripUpdatedEvents={props.handleTripUpdatedEvents}
+                                        />
+                                        <Message.Header content='Bags' />
+                                        {props.trip.carryons.length > 0 
+                                            ? props.trip.carryons.map(bag => <BagTiny 
+                                                                                key={bag.id} 
+                                                                                bag={bag} 
+                                                                            />) 
+                                                : <br/> }
                                     </Message>
                                 </Grid.Column>
                             </Grid.Row>
@@ -114,8 +172,17 @@ const SingleTripDetails = (props) => {
                             <Grid.Row>
                                 <Grid.Column width={16}>
                                     <List divided horizontal>
-                                        <List.Item><EditModal trip={props.trip} handleTripEditClick={props.handleTripEditClick}/></List.Item>
-                                        <List.Item><a href='' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>Delete</a></List.Item>
+                                        <List.Item>
+                                            <EditModal 
+                                                trip={props.trip} 
+                                                handleTripEditClick={props.handleTripEditClick}
+                                            />
+                                        </List.Item>
+                                        <List.Item>
+                                            <a href='' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>
+                                                Delete
+                                            </a>
+                                        </List.Item>
                                     </List>
                                 </Grid.Column>
                             </Grid.Row>
@@ -137,7 +204,8 @@ class EditModal extends React.Component {
             description: '',
             start_date: '',
             end_date: '',
-            photo: ''
+            photo: '',
+            miles: 0
         }
     }
 
@@ -150,7 +218,8 @@ class EditModal extends React.Component {
             description: tripCopy.description,
             start_date: tripCopy.start_date,
             end_date: tripCopy.end_date,
-            photo: tripCopy.photo
+            photo: tripCopy.photo,
+            miles: tripCopy.miles
         })
     }
 
@@ -201,12 +270,68 @@ class EditModal extends React.Component {
     }
 }
 
-const AddButton = () => {
+const AddButton = (props) => {
+    const createNewItem = () => {
+        fetch(`http://localhost:9292/${props.name}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                trip_id: props.trip.id
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => props.handleTripUpdatedEvents(props.name, data))
+    }
+
     return (
-        <Button icon compact basic floated='left' size='mini'>
+        <Button onClick={() => createNewItem(props)} icon compact basic floated='left' size='mini'>
             <Icon name='plus'/>
         </Button>
     )
 }
+
+class AddBagButton extends React.Component {
+    fetchBags = () => {
+        fetch('http://localhost:9292/luggages')
+        .then(resp => resp.json())
+        .then(data => {
+            let bags = data.filter(bag => bag.user_id === parseInt(localStorage.current_user_id))
+            console.log(bags)
+        })
+    }
+
+    handleBags = (bags) => {
+        console.log(bags)
+    }
+
+    render () {
+        this.fetchBags()
+
+        return (
+            <Modal 
+                size='mini'
+                dimmer='blurring'
+                trigger={<Button icon compact basic floated='left' size='mini'><Icon name='plus'/></Button>}
+                closeIcon
+                closeOnDimmerClick
+            >
+                <Modal.Content>
+                    <Form>
+                        <Form.Select 
+                            fluid
+                            label='Select a Bag'
+                            options={null}
+                        />
+                        <Form.Button type='submit' floated='right' >Submit</Form.Button>
+                    </Form>
+                </Modal.Content>
+            </Modal>
+        )
+    }
+}
+
 
 export default SingleTripDetails
