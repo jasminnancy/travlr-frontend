@@ -8,6 +8,7 @@ import Milan from '../photos/italy.jpg'
 import DefaultTripPhoto from '../photos/default-trip-photo.jpg'
 import { Grid, Dimmer, Segment, Icon, Header, Button } from 'semantic-ui-react'
 
+const URL = 'http://localhost:9292'
 const TRIP_URL = 'http://localhost:9292/trips'
 
 class Trips extends React.Component {
@@ -95,6 +96,238 @@ class Trips extends React.Component {
         })
     }
 
+    handleTripUpdatedEvents = (type, newItem) => {
+        let trip = {...this.state.selectedTrip}
+        trip[type].push(newItem)
+
+        this.setState({
+            selectedTrip: trip
+        })
+    }
+
+    handleDeletedTransport = (e, transport) => {
+        e.preventDefault()
+
+        fetch(URL + '/transportations/' + transport.id, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json())
+        
+        let tripCopy = {...this.state.selectedTrip}
+        let transpCopy = tripCopy.transportations.filter(transp => transp.id !== transport.id)
+        tripCopy.transportations = transpCopy
+        this.setState({
+            selectedTrip: tripCopy
+        })
+    }
+
+    handleDeletedHotel = (e, hotel) => {
+        e.preventDefault()
+
+        fetch(URL + '/hotels/' + hotel.id, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json())
+        
+        let tripCopy = {...this.state.selectedTrip}
+        let hotelCopy = tripCopy.hotels.filter(h => h.id !== hotel.id)
+        tripCopy.hotels = hotelCopy
+        this.setState({
+            selectedTrip: tripCopy
+        })
+    }
+
+    handleDeletedPlace = (e, place) => {
+        e.preventDefault()
+
+        fetch(URL + '/places/' + place.id, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json())
+        
+        let tripCopy = {...this.state.selectedTrip}
+        let placeCopy = tripCopy.places.filter(p => p.id !== place.id)
+        tripCopy.places = placeCopy
+        this.setState({
+            selectedTrip: tripCopy
+        })
+    }
+
+    handleDeletedEvent = (e, event) => {
+        e.preventDefault()
+
+        fetch(URL + '/events/' + event.id, {
+            method: 'DELETE'
+        })
+        .then(resp => resp.json())
+        
+        let tripCopy = {...this.state.selectedTrip}
+        let eventCopy = tripCopy.events.filter(e => e.id !== event.id)
+        tripCopy.events = eventCopy
+        this.setState({
+            selectedTrip: tripCopy
+        })
+    }
+
+    transportEdit = (transportation, values) => {
+        fetch(URL + '/transportations/' + transportation.id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: values.name,
+                transport_type: values.transport_type,
+                company: values.company,
+                cost: values.cost,
+                starting_date: values.starting_date,
+                starting_time: values.starting_time,
+                ending_date: values.ending_date,
+                ending_time: values.ending_time,
+                starting_location: values.starting_location,
+                destination: values.destination,
+                total_miles: values.total_miles,
+                confirmation_code: values.confirmation_code,
+                notes: values.notes
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let tripCopy = {...this.state.selectedTrip}
+            let transportations = tripCopy.transportations.filter(transp => transp.id !== transportation.id)
+            transportations.push(transportation)
+            tripCopy.transportations = transportations
+
+            this.setState({
+                selectedTrip: tripCopy
+            })
+            alert('Your trip has been updated!')
+        })
+    }
+
+    hotelEdit = (hotel, values) => {
+        fetch(URL + '/hotels/' + hotel.id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: values.name,
+                cost: values.cost,
+                starting_date: values.starting_date,
+                ending_date: values.ending_date,
+                address1: values.address1,
+                address2: values.address2,
+                city: values.city,
+                us_state: values.us_state,
+                zip: values.zip,
+                country: values.country,
+                notes: values.notes
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let tripCopy = {...this.state.selectedTrip}
+            let hotels = tripCopy.hotels.filter(h => h.id !== hotel.id)
+            hotels.push(hotel)
+            tripCopy.hotels = hotels
+
+            this.setState({
+                selectedTrip: tripCopy
+            })
+            alert('Your trip has been updated!')
+        })
+    }
+
+    placeEdit = (place, values) => {
+        fetch(URL + '/places/' + place.id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: values.name,
+                cost: values.cost,
+                address1: values.address1,
+                address2: values.address2,
+                city: values.city,
+                us_state: values.us_state,
+                zip: values.zip,
+                country: values.country,
+                notes: values.notes
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let tripCopy = {...this.state.selectedTrip}
+            let places = tripCopy.places.filter(p => p.id !== place.id)
+            places.push(place)
+            tripCopy.places = places
+
+            this.setState({
+                selectedTrip: tripCopy
+            })
+            alert('Your trip has been updated!')
+        })
+    }
+
+    eventEdit = (event, values) => {
+        fetch(URL + '/events/' + event.id, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: values.name,
+                cost: values.cost,
+                address1: values.address1,
+                address2: values.address2,
+                city: values.city,
+                us_state: values.us_state,
+                zip: values.zip,
+                country: values.country,
+                notes: values.notes
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let tripCopy = {...this.state.selectedTrip}
+            let events = tripCopy.events.filter(e => e.id !== event.id)
+            events.push(event)
+            tripCopy.events = events
+
+            this.setState({
+                selectedTrip: tripCopy
+            })
+            alert('Your trip has been updated!')
+        })
+    }
+
+    formatTime = (time) => {
+        if (time) {
+            let formattedTime
+            let format = time.split(':')
+
+            if (format[0] > 12) {
+                formattedTime = format[0] - 12 + ':' + format[1] + ' PM'
+            } else {
+                formattedTime = time + ' AM'
+            }
+            return formattedTime
+        }
+    }
+
+    formatDate = (date) => {
+        if (date) {
+            let format = date.split('-')
+            return (format[1] + '/' + format[2] + '/' + format[0])
+        }
+    }
+
     render () {
         return (
             <div>
@@ -106,7 +339,19 @@ class Trips extends React.Component {
                         handleBackClick={this.handleBackClick}
                         handleTripEditClick={this.handleTripEditClick}
                         handleDeleteClick={this.handleDeleteClick}
-                        selectedTrip={this.state.selectedTrip}/> 
+                        handleDeletedTransport={this.handleDeletedTransport}
+                        handleDeletedHotel={this.handleDeletedHotel}
+                        handleDeletedPlace={this.handleDeletedPlace}
+                        handleDeletedEvent={this.handleDeletedEvent}
+                        selectedTrip={this.state.selectedTrip}
+                        handleTripUpdatedEvents={this.handleTripUpdatedEvents}
+                        transportEdit={this.transportEdit}
+                        hotelEdit={this.hotelEdit}
+                        placeEdit={this.placeEdit}
+                        eventEdit={this.eventEdit}
+                        formatTime={this.formatTime}
+                        formatDate={this.formatDate}
+                    /> 
                         : <BasicPage activeUser={activeUser}/>}
             </div>
         )
@@ -126,12 +371,24 @@ const LoggedIn = (props) => {
                                 activeUser={props.activeUser} 
                                 addNewTrip={props.addNewTrip}
                                 handleTripClick={props.handleTripClick}
+                                formatDate={props.formatDate}
                             />
                             : <SingleTripDetails 
                                 trip={props.selectedTrip}
                                 handleBackClick={props.handleBackClick}
                                 handleTripEditClick={props.handleTripEditClick}
                                 handleDeleteClick={props.handleDeleteClick}
+                                handleDeletedTransport={props.handleDeletedTransport}
+                                handleDeletedHotel={props.handleDeletedHotel}
+                                handleDeletedPlace={props.handleDeletedPlace}
+                                handleDeletedEvent={props.handleDeletedEvent}
+                                handleTripUpdatedEvents={props.handleTripUpdatedEvents}
+                                transportEdit={props.transportEdit}
+                                hotelEdit={props.hotelEdit}
+                                placeEdit={props.placeEdit}
+                                eventEdit={props.eventEdit}
+                                formatTime={props.formatTime}
+                                formatDate={props.formatDate}
                             />}
                 </Grid.Column>
             </Grid>
@@ -153,7 +410,11 @@ const TripContainer = (props) => {
                 addNewTrip={props.addNewTrip}
             /> 
             <br/>
-            {props.activeUser.trips.map(trip => <SingleTrip key={trip.id} handleTripClick={props.handleTripClick} trip={trip}/>)}
+            {props.activeUser.trips.map(trip => <SingleTrip 
+                                                    key={trip.id} 
+                                                    handleTripClick={props.handleTripClick} 
+                                                    formatDate={props.formatDate}
+                                                    trip={trip}/>)}
         </div>
     )
 }

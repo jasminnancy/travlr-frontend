@@ -7,7 +7,7 @@ const Sidebar = (props) => {
 
     return (
             <Menu vertical fluid>
-                <Card>
+                <Card fluid>
                     <Image 
                         src={!props.activeUser.profile_pic 
                             ? 'https://react.semantic-ui.com/images/avatar/large/molly.png' 
