@@ -28,7 +28,7 @@ const SingleBag = (props) => {
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={4}>
-                        <Image src={photo} size='small' />
+                        <Image src={photo} size='huge' alt={`bag ${props.bag.name}`}/>
                     </Grid.Column>
                     
                     <Grid.Column width={12}>

@@ -1,10 +1,13 @@
 import React from 'react'
-import { Card } from 'semantic-ui-react'
+import { Card, Header } from 'semantic-ui-react'
 
 const BagTiny = (props) => {
     return (
         <Card>
-            
+            <Card.Content>
+                <Header as='h5'>{props.bag.luggage.name}</Header>
+                {props.bag.luggage.size ? props.bag.luggage.size : "???"} ltr {props.bag.luggage.luggage_type}
+            </Card.Content>
         </Card>
     )
 }

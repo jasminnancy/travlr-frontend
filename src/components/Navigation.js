@@ -39,7 +39,7 @@ const Navigation = (props) => {
                     <Menu.Item onClick={props.handleUserAuth}>
                         {!props.activeUser.username 
                             ? <LogInModal 
-                                logInOpen={props.logInOpen}
+                                close={props.close}
                                 activeUser={props.activeUser}
                                 logIn={props.logIn}
                             />
@@ -51,8 +51,11 @@ const Navigation = (props) => {
 
             <div className='centered-body'>
                 <Route exact path="/" render={() => <Home activeUser={props.activeUser} />} />
-                <Route exact path="/trips" render={() => <Trips handleAddedTrip={props.handleAddedTrip} activeUser={props.activeUser} addNewTrip={props.addNewTrip}/>} />
-                <Route exact path="/luggage" render={() => <Luggage handleAddedBag={props.handleAddedBag} activeUser={props.activeUser} />} />
+                <Route exact path="/trips" render={() => <Trips 
+                                                            handleAddedTrip={props.handleAddedTrip} 
+                                                            handleRemovedTrip={props.handleRemovedTrip} 
+                                                            activeUser={props.activeUser}/>} />
+                <Route exact path="/luggage" render={() => <Luggage handleAddedBag={props.handleAddedBag} handleRemovedBag={props.handleRemovedBag} activeUser={props.activeUser} />} />
             </div>
             <Footer />
         </div>
@@ -63,10 +66,10 @@ const Navigation = (props) => {
 const LogInModal = (props) => {
     return (
         <Modal 
-            open={props.logInOpen}
             size='tiny' 
             dimmer='blurring'
             trigger={<Button basic>Log In/Sign Up</Button>}
+            closeIcon
         >
             <Modal.Header>
                 <Icon name='user'/> 
@@ -111,6 +114,7 @@ class NestedModal extends React.Component {
                             Create an account <Icon name='right chevron' />
                         </Button>
                     }
+                    closeIcon
                 >
                     <Modal.Header ><Icon name='user'/> Create Your Account</Modal.Header>
                     <Modal.Content>
@@ -128,7 +132,6 @@ class NestedModal extends React.Component {
                             <Button floated='right' size='medium' type='submit'>Create Account</Button>
                         </Form>
                     </Modal.Content>
-                    <Button basic fluid floated='left' icon='arrow left' content='Go Back' onClick={this.close} />
                 </Modal>
             </div>
         )
