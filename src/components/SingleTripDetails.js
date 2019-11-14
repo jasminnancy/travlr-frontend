@@ -156,6 +156,7 @@ const SingleTripDetails = (props) => {
                                         <AddBagButton 
                                             trip={props.trip}
                                             name='carryons'
+                                            createCarryOn={props.createCarryOn}
                                             handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                                         />
                                         <Message.Header content='Bags' />
@@ -275,7 +276,8 @@ const AddButton = (props) => {
         fetch(`http://localhost:9292/${props.name}`, {
             method: 'POST',
             body: JSON.stringify({
-                trip_id: props.trip.id
+                trip_id: props.trip.id,
+                name: 'Click to Edit'
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -294,38 +296,52 @@ const AddButton = (props) => {
 }
 
 class AddBagButton extends React.Component {
+    constructor () {
+        super()
+
+        this.state = {
+            bags: [],
+            bag_id: ''
+        }
+    }
+
+    options = []
+
     fetchBags = () => {
         fetch('http://localhost:9292/luggages')
         .then(resp => resp.json())
         .then(data => {
             let bags = data.filter(bag => bag.user_id === parseInt(localStorage.current_user_id))
-            console.log(bags)
+            bags.forEach(bag => this.options.push({id: bag.id, text: `${bag.name} - ${bag.luggage_type}`, value: bag.name}))
         })
     }
 
-    handleBags = (bags) => {
-        console.log(bags)
+    handleChange = (e) => {
+        this.setState({
+            bag_id: e.currentTarget.id
+        })
     }
 
     render () {
         this.fetchBags()
-
         return (
             <Modal 
                 size='mini'
                 dimmer='blurring'
+
                 trigger={<Button icon compact basic floated='left' size='mini'><Icon name='plus'/></Button>}
                 closeIcon
                 closeOnDimmerClick
             >
                 <Modal.Content>
-                    <Form>
+                    <Form onSubmit={() => this.props.createCarryOn(this.state.bag_id, this.props.trip.id)}>
                         <Form.Select 
                             fluid
                             label='Select a Bag'
-                            options={null}
+                            onChange={(e) => this.handleChange(e)}
+                            options={this.options}
                         />
-                        <Form.Button type='submit' floated='right' >Submit</Form.Button>
+                        <Form.Button type='submit' floated='right' >Submit</Form.Button><br/><br/>
                     </Form>
                 </Modal.Content>
             </Modal>

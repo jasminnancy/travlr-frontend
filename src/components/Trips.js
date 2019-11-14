@@ -28,9 +28,7 @@ class Trips extends React.Component {
                 title: 'My New Trip',
                 description: 'No Description Added...',
                 budget: 0,
-                photo: DefaultTripPhoto,
-                start_date: "No Start Date",
-                end_date: "No End Date"
+                photo: DefaultTripPhoto
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -307,6 +305,30 @@ class Trips extends React.Component {
         })
     }
 
+    createCarryOn = (bag, trip) => {
+        fetch('http://localhost:9292/carryons', {
+            method: 'POST',
+            body: JSON.stringify({
+                luggage_id: bag,
+                trip_id: trip
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let tripCopy = {...this.state.selectedTrip}
+            let carryons = tripCopy.carryons.push(data)
+            tripCopy.carryons = carryons
+
+            this.setState({
+                selectedTrip: tripCopy
+            })
+        })
+    }
+
     formatTime = (time) => {
         if (time) {
             let formattedTime
@@ -351,6 +373,7 @@ class Trips extends React.Component {
                         eventEdit={this.eventEdit}
                         formatTime={this.formatTime}
                         formatDate={this.formatDate}
+                        createCarryOn={this.createCarryOn}
                     /> 
                         : <BasicPage activeUser={activeUser}/>}
             </div>
@@ -389,6 +412,7 @@ const LoggedIn = (props) => {
                                 eventEdit={props.eventEdit}
                                 formatTime={props.formatTime}
                                 formatDate={props.formatDate}
+                                createCarryOn={props.createCarryOn}
                             />}
                 </Grid.Column>
             </Grid>
