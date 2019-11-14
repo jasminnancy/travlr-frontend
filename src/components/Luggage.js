@@ -16,7 +16,6 @@ class Luggage extends React.Component {
     }
 
     addNewBag = (user) => {
-        debugger
         fetch(BAG_URL, {
             method: 'POST',
             body: JSON.stringify({
