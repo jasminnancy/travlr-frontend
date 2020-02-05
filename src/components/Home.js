@@ -1,4 +1,5 @@
 import React from 'react'
+import Sidebar from './Sidebar'
 import MainImage from '../photos/homepage.jpg'
 import Suitcase2 from '../photos/suitcase2.jpg'
 import Event1 from '../photos/event1.jpg'
@@ -15,8 +16,15 @@ const Home = (props) => {
 
 const LoggedIn = (props) => {
     return (
-        <div>
-            Welcome {props.activeUser.username}!
+        <div className='main-body double-centered'>
+            <Grid>
+                <Grid.Column width={4}>
+                    <Sidebar activeUser={props.activeUser}/>
+                </Grid.Column>  
+                <Grid.Column width={12}>
+                    Welcome {props.activeUser.username}!
+                </Grid.Column>
+            </Grid>
         </div>
     )
 }

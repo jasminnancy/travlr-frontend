@@ -148,10 +148,10 @@ const Footer = () => {
         <Container fluid className='footer'>
             <Grid columns={2} relaxed='very'>
                 <Grid.Column>
-                    © 2019 by Alexandria Pugia
+                    © 2019-2020 by Alexandria Pugia
                 </Grid.Column>
                 <Grid.Column textAlign='right'>
-                    Proudly made for Flatiron School
+                    <a href='https://github.com/jasminnancy'>Click here to visit my GitHub account</a>
                 </Grid.Column>
             </Grid>
         </Container>
