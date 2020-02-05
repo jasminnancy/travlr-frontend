@@ -180,7 +180,7 @@ const SingleTripDetails = (props) => {
                                             />
                                         </List.Item>
                                         <List.Item>
-                                            <a href='*' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>
+                                            <a href='' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>
                                                 Delete
                                             </a>
                                         </List.Item>
@@ -241,7 +241,7 @@ class EditModal extends React.Component {
             <Modal 
                 size='small'
                 dimmer='blurring'
-                trigger={<a href='*'>Edit Trip Info</a>}
+                trigger={<a href=''>Edit Trip Info</a>}
                 closeIcon
                 closeOnDimmerClick
             >

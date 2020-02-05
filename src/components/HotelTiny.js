@@ -110,7 +110,7 @@ class HotelTiny extends React.Component {
                         <Form.TextArea width='16' id='notes' label="Notes" value={this.state.notes} />
                         <Form.Button type='submit' floated='right' >Submit</Form.Button>
                     </Form><br/>
-                    <a href='*' onClick={(e) => {this.props.handleDeletedHotel(e, this.props.hotel)}}>Delete</a><br/>
+                    <a href='' onClick={(e) => {this.props.handleDeletedHotel(e, this.props.hotel)}}>Delete</a><br/>
                 </Modal.Content>
             </Modal>
         )
