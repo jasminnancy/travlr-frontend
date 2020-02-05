@@ -139,7 +139,7 @@ class TransportTiny extends React.Component {
                         <Form.TextArea width='16' id='notes' label="Notes" value={this.state.notes} />
                         <Form.Button type='submit' floated='right' >Submit</Form.Button>
                     </Form><br/>
-                    <a href='' onClick={(e) => {this.props.handleDeletedTransport(e, this.props.transport)}}>Delete</a><br/>
+                    <a href='*' onClick={(e) => {this.props.handleDeletedTransport(e, this.props.transport)}}>Delete</a><br/>
                 </Modal.Content>
             </Modal>
         )

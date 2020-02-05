@@ -53,7 +53,7 @@ const BasicPage = (props) => {
                 </Statistic>
             </Statistic.Group>
 
-            <div class="ui divider"></div>
+            <div className="ui divider"></div>
 
             <Grid centered columns={3} padded='true'>
                 <Grid.Column>
@@ -85,7 +85,7 @@ const BasicPage = (props) => {
                 </Grid.Column>
             </Grid>
 
-            <div class="ui divider"></div>
+            <div className="ui divider"></div>
         </div>
     )
 }

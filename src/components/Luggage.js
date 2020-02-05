@@ -4,7 +4,7 @@ import SingleBag from './SingleBag'
 import SingleBagDetails from './SingleBagDetails'
 import { Grid, Button, Card, Dimmer, Segment, Header, Icon } from 'semantic-ui-react'
 
-const BAG_URL = 'http://localhost:9292/luggages'
+const BAG_URL = 'http://localhost:3000/luggages'
 
 class Luggage extends React.Component {
     constructor () {
@@ -144,7 +144,7 @@ const BagsContainer = (props) => {
             /> 
             <br/>
             <Card.Group itemsPerRow={2}>
-                {props.activeUser.luggages.map(bag => <SingleBag handleBagClick={props.handleBagClick} bag={bag}/>)}
+                {props.activeUser.luggages.map(bag => <SingleBag handleBagClick={props.handleBagClick} bag={bag} />)}
             </Card.Group>
         </div>
     )

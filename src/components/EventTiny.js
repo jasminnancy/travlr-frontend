@@ -97,7 +97,7 @@ class EventTiny extends React.Component {
                         <Form.TextArea width='16' id='notes' label="Notes" value={this.state.notes} />
                         <Form.Button type='submit' floated='right' >Submit</Form.Button>
                     </Form><br/>
-                    <a href='' onClick={(e) => {this.props.handleDeletedEvent(e, this.props.event)}}>Delete</a><br/>
+                    <a href='*' onClick={(e) => {this.props.handleDeletedEvent(e, this.props.event)}}>Delete</a><br/>
                 </Modal.Content>
             </Modal>
         )

@@ -8,8 +8,8 @@ import Milan from '../photos/italy.jpg'
 import DefaultTripPhoto from '../photos/default-trip-photo.jpg'
 import { Grid, Dimmer, Segment, Icon, Header, Button } from 'semantic-ui-react'
 
-const URL = 'http://localhost:9292'
-const TRIP_URL = 'http://localhost:9292/trips'
+const URL = 'http://localhost:3000'
+const TRIP_URL = URL + '/trips'
 
 class Trips extends React.Component {
     constructor () {
@@ -306,7 +306,7 @@ class Trips extends React.Component {
     }
 
     createCarryOn = (bag, trip) => {
-        fetch('http://localhost:9292/carryons', {
+        fetch('http://localhost:3000/carryons', {
             method: 'POST',
             body: JSON.stringify({
                 luggage_id: bag,

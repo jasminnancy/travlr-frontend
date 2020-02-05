@@ -180,7 +180,7 @@ const SingleTripDetails = (props) => {
                                             />
                                         </List.Item>
                                         <List.Item>
-                                            <a href='' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>
+                                            <a href='*' onClick={(e) => {props.handleDeleteClick(e, props.trip)}}>
                                                 Delete
                                             </a>
                                         </List.Item>
@@ -241,7 +241,7 @@ class EditModal extends React.Component {
             <Modal 
                 size='small'
                 dimmer='blurring'
-                trigger={<a href='#'>Edit Trip Info</a>}
+                trigger={<a href='*'>Edit Trip Info</a>}
                 closeIcon
                 closeOnDimmerClick
             >
@@ -273,7 +273,7 @@ class EditModal extends React.Component {
 
 const AddButton = (props) => {
     const createNewItem = () => {
-        fetch(`http://localhost:9292/${props.name}`, {
+        fetch(`http://localhost:3000/${props.name}`, {
             method: 'POST',
             body: JSON.stringify({
                 trip_id: props.trip.id,
@@ -308,7 +308,7 @@ class AddBagButton extends React.Component {
     options = []
 
     fetchBags = () => {
-        fetch('http://localhost:9292/luggages')
+        fetch('http://localhost:3000/luggages')
         .then(resp => resp.json())
         .then(data => {
             let bags = data.filter(bag => bag.user_id === parseInt(localStorage.current_user_id))

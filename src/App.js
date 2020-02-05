@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Navigation from './components/Navigation'
 
-const URL_USERS = 'http://localhost:9292/users'
+const URL_USERS = 'http://localhost:3000/users'
 
 class App extends Component {
 

@@ -85,7 +85,7 @@ const SingleBagDetails = (props) => {
                                 <Grid.Column width={16}>
                                     <List divided horizontal>
                                         <List.Item><EditModal bag={props.bag} handleBagEditClick={props.handleBagEditClick}/></List.Item>
-                                        <List.Item><a href='' onClick={(e) => {props.handleDeleteClick(e, props.bag)}}>Delete</a></List.Item>
+                                        <List.Item><a href='*' onClick={(e) => {props.handleDeleteClick(e, props.bag)}}>Delete</a></List.Item>
                                     </List>
                                 </Grid.Column>
                             </Grid.Row>
@@ -141,7 +141,7 @@ class EditModal extends React.Component {
             <Modal 
                 size='small'
                 dimmer='blurring'
-                trigger={<a href='#'>Edit Bag Info</a>}
+                trigger={<a href='*'>Edit Bag Info</a>}
                 closeIcon
                 closeOnDimmerClick
             >
