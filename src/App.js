@@ -1,101 +1,92 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
-import Navigation from './components/Navigation'
+import { Switch, Route } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 
-const URL_USERS = 'http://localhost:3000/users'
+//styling
+import {
+  Dimmer, 
+  Loader, 
+  Image, 
+  Segment
+} from 'semantic-ui-react'
 
-class App extends Component {
+//components
+import Navigation from './components/Navigation/Navigation'
+import HomeView from './views/HomeView'
+import TripsView from './views/TripsView'
+import BagsView from './views/LuggageView'
+import Footer from './components/Navigation/Footer'
+import LuggageView from './views/LuggageView';
 
-  constructor() {
-    super()
-    this.state = {
-      activeTab: window.location.pathname,
-      activeUser: [],
-      users: []
-    }
-  }
+const App = () => {
+  const [activeTab, setActiveTab] = useState(window.location.pathname)
+  const [activeUser, setActiveUser] = useState([])
+  const [users, setUsers] = useState([])
+  const { loading, user, loginWithRedirect } = useAuth0();
 
-  componentDidMount () {
-    if (localStorage.getItem('current_user_id')) {
-      fetch(URL_USERS + '/' + localStorage.getItem('current_user_id'))
+  useEffect(() => {
+    if (!loading && localStorage.getItem('current_user_id')) {
+      fetch('http://localhost:3000/users/' + localStorage.getItem('current_user_id'))
       .then(resp => resp.json())
       .then(data => {
-        this.setState({
-          activeUser: data
-        })
+        setActiveUser(data)
       })
     }
-
-    fetch(URL_USERS)
+    fetch('http://localhost:3000/users')
     .then(resp => resp.json())
     .then(data => {
-      this.setState({
-        users: data
-      })
+      setUsers(data)
     })
+  }, [])
+
+  if (user) {
+    debugger
   }
 
-  handleAddedTrip = (trip) => {
-    let trips = [...this.state.activeUser.trips]
-    trips.push(trip)
+  // const logIn = (e) => {
+  //   e.preventDefault()
 
-    this.setState({
-      activeUser: {...this.state.activeUser, trips: trips}
-    })
-  }
+  //   // setActiveUser(users[0])
+  //   // localStorage.setItem('current_user_id', `${activeUser.id}`)
+  // }
 
-  handleRemovedTrip = (removedTrip) => {
-    let trips = [...this.state.activeUser.trips]
-    let updatedTrips = trips.filter(trip => trip.id !== removedTrip.id)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, trips: updatedTrips}
-    })
-  }
-
-  handleAddedBag = (bag) => {
-    let bags = [...this.state.activeUser.luggages]
-    bags.push(bag)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, luggages: bags}
-    })
-  }
-
-  handleRemovedBag = (removedBag) => {
-    let bags = [...this.state.activeUser.luggages]
-    let updatedBags = bags.filter(trip => trip.id !== removedBag.id)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, luggages: updatedBags}
-    })
-  }
-
-  logIn = (e) => {
-    e.preventDefault()
-
-    this.setState({ 
-      activeUser: this.state.users[0], 
-    }, () => localStorage.setItem('current_user_id', `${this.state.activeUser.id}`))
-  }
-
-  render () {
+  if (loading) {
     return (
-      <div className="App">
-        <Navigation 
-          activeTab={this.state.activeTab} 
-          activeUser={this.state.activeUser}
-          handleUserAuth={this.handleUserAuth}
-          handleAddedTrip={this.handleAddedTrip}
-          handleRemovedTrip={this.handleRemovedTrip}
-          handleAddedBag={this.handleAddedBag}
-          handleRemovedBag={this.handleRemovedBag}
-          logIn={this.logIn}
-          exit={this.exit}
-        />
-      </div>
-    );
+      <Segment>
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+        <Image src='/images/wireframe/short-paragraph.png' />
+      </Segment>
+    )
   }
+
+  return (
+    <div className="App">
+      <Navigation 
+        activeTab={activeTab} 
+        activeUser={activeUser}
+        logIn={loginWithRedirect}
+      />
+      <div className='centered-body'>
+        <Switch>
+          <Route exact path="/trips" render={() => <TripsView 
+                                                    activeUser={activeUser} 
+                                                    setActiveUser={setActiveUser} 
+                                                    setActiveTab={setActiveTab} />} />
+          <Route exact path="/luggage" render={() => <LuggageView 
+                                                    activeUser={activeUser} 
+                                                    setActiveUser={setActiveUser} 
+                                                    setActiveTab={setActiveTab} />} />
+          <Route path="/" render={() => <HomeView 
+                                          activeUser={activeUser} 
+                                          setActiveTab={setActiveTab} />} />
+        </Switch>
+      </div>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
