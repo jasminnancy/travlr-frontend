@@ -1,101 +1,67 @@
-import React, {Component} from 'react';
-import './App.css';
-import Navigation from './components/Navigation'
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
-const URL_USERS = 'http://localhost:3000/users'
+//components
+import Navigation from "./components/Navigation/Navigation";
+import Footer from "./components/Navigation/Footer";
+import HomeView from "./views/HomeView";
+import TripsView from "./views/TripsView";
+import LuggageView from "./views/PageNotFound";
+import PageNotFound from "./views/PageNotFound";
 
-class App extends Component {
+//styling
+import "./App.css";
 
-  constructor() {
-    super()
-    this.state = {
-      activeTab: window.location.pathname,
-      activeUser: [],
-      users: []
-    }
-  }
+const history = createBrowserHistory();
 
-  componentDidMount () {
-    if (localStorage.getItem('current_user_id')) {
-      fetch(URL_USERS + '/' + localStorage.getItem('current_user_id'))
-      .then(resp => resp.json())
-      .then(data => {
-        this.setState({
-          activeUser: data
-        })
-      })
-    }
+const App = () => {
+  const [activeTab, setActiveTab] = useState(window.location.pathname);
+  const [activeUser, setActiveUser] = useState(null);
 
-    fetch(URL_USERS)
-    .then(resp => resp.json())
-    .then(data => {
-      this.setState({
-        users: data
-      })
-    })
-  }
+  useEffect(() => {
+    setActiveTab(window.location.pathname);
 
-  handleAddedTrip = (trip) => {
-    let trips = [...this.state.activeUser.trips]
-    trips.push(trip)
+    let userId = localStorage.getItem("current_user_id");
+    if (!userId) return;
 
-    this.setState({
-      activeUser: {...this.state.activeUser, trips: trips}
-    })
-  }
+    fetch(`http://localhost:3000/users/${userId}`)
+      .then((resp) => resp.json())
+      .then((data) => setActiveUser(data));
+  }, []);
 
-  handleRemovedTrip = (removedTrip) => {
-    let trips = [...this.state.activeUser.trips]
-    let updatedTrips = trips.filter(trip => trip.id !== removedTrip.id)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, trips: updatedTrips}
-    })
-  }
-
-  handleAddedBag = (bag) => {
-    let bags = [...this.state.activeUser.luggages]
-    bags.push(bag)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, luggages: bags}
-    })
-  }
-
-  handleRemovedBag = (removedBag) => {
-    let bags = [...this.state.activeUser.luggages]
-    let updatedBags = bags.filter(trip => trip.id !== removedBag.id)
-
-    this.setState({
-      activeUser: {...this.state.activeUser, luggages: updatedBags}
-    })
-  }
-
-  logIn = (e) => {
-    e.preventDefault()
-
-    this.setState({ 
-      activeUser: this.state.users[0], 
-    }, () => localStorage.setItem('current_user_id', `${this.state.activeUser.id}`))
-  }
-
-  render () {
-    return (
-      <div className="App">
-        <Navigation 
-          activeTab={this.state.activeTab} 
-          activeUser={this.state.activeUser}
-          handleUserAuth={this.handleUserAuth}
-          handleAddedTrip={this.handleAddedTrip}
-          handleRemovedTrip={this.handleRemovedTrip}
-          handleAddedBag={this.handleAddedBag}
-          handleRemovedBag={this.handleRemovedBag}
-          logIn={this.logIn}
-          exit={this.exit}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="App">
+      <Navigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        setActiveUser={setActiveUser}
+      />
+      <Router history={history}>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <HomeView activeUser={activeUser} setActiveTab={setActiveTab} />
+            )}
+          />
+          <Route
+            exact
+            path="/trips"
+            render={() => <TripsView activeUser={activeUser} />}
+          />
+          <Route
+            exact
+            path="/luggage"
+            render={() => <LuggageView activeUser={activeUser} />}
+          />
+          <Route path="/" render={() => <PageNotFound />} />
+        </Switch>
+      </Router>
+      <Footer />
+    </div>
+  );
+};
 
 export default App;
