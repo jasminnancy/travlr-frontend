@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { Router, Switch, Route } from "react-router-dom";
+import history from "./components/Shared/history";
 
 //components
 import Navigation from "./components/Navigation/Navigation";
@@ -13,8 +13,6 @@ import PageNotFound from "./views/PageNotFound";
 //styling
 import "./App.css";
 
-const history = createBrowserHistory();
-
 const App = () => {
   const [activeTab, setActiveTab] = useState(window.location.pathname);
   const [activeUser, setActiveUser] = useState(null);
@@ -23,21 +21,22 @@ const App = () => {
     setActiveTab(window.location.pathname);
 
     let userId = localStorage.getItem("current_user_id");
-    if (!userId) return;
+    if (!userId || activeUser) return;
 
     fetch(`http://localhost:3000/users/${userId}`)
       .then((resp) => resp.json())
       .then((data) => setActiveUser(data));
-  }, []);
+  }, [activeUser]);
 
   return (
     <div className="App">
-      <Navigation
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        setActiveUser={setActiveUser}
-      />
       <Router history={history}>
+        <Navigation
+          activeTab={activeTab}
+          activeUser={activeUser}
+          setActiveTab={setActiveTab}
+          setActiveUser={setActiveUser}
+        />
         <Switch>
           <Route
             exact
@@ -58,8 +57,8 @@ const App = () => {
           />
           <Route path="/" render={() => <PageNotFound />} />
         </Switch>
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 };

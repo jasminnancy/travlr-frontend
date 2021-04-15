@@ -9,9 +9,9 @@ const HomeView = (props) => {
 
   if (!activeUser) {
     return <BasicPage />;
+  } else {
+    return <Home activeUser={activeUser} />;
   }
-
-  return <Home activeUser={activeUser} />;
 };
 
 export default HomeView;

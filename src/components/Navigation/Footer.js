@@ -9,7 +9,11 @@ const Footer = () => {
       <Grid columns={2} relaxed="very">
         <Grid.Column>© 2019-2021 by Alexandria Pugia</Grid.Column>
         <Grid.Column textAlign="right">
-          <a href="https://github.com/jasminnancy">
+          <a
+            href="https://github.com/jasminnancy"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             Click here to visit my GitHub account
           </a>
         </Grid.Column>

@@ -1,6 +1,13 @@
 import React from "react";
 
+//images
+import MainImage from "../../photos/homepage.jpg";
+import Suitcase2 from "../../photos/suitcase2.jpg";
+import Event1 from "../../photos/event1.jpg";
+import Money1 from "../../photos/money1.jpg";
+
 //styling
+import withStyles from "react-jss";
 import {
   Image,
   Statistic,
@@ -9,17 +16,15 @@ import {
   Segment,
   Header,
 } from "semantic-ui-react";
-import MainImage from "../../photos/homepage.jpg";
-import Suitcase2 from "../../photos/suitcase2.jpg";
-import Event1 from "../../photos/event1.jpg";
-import Money1 from "../../photos/money1.jpg";
 
 const BasicPage = (props) => {
+  const { classes } = props;
+
   return (
     <div>
       <Image src={MainImage} alt="map" />
 
-      <Statistic.Group widths="four">
+      <Statistic.Group widths="four" className={classes.statsSpacing}>
         <Statistic>
           <Statistic.Value>800,000</Statistic.Value>
           <Statistic.Label>Miles</Statistic.Label>
@@ -83,4 +88,10 @@ const BasicPage = (props) => {
   );
 };
 
-export default BasicPage;
+const styles = {
+  statsSpacing: {
+    marginTop: "15px !important",
+  },
+};
+
+export default withStyles(styles)(BasicPage);

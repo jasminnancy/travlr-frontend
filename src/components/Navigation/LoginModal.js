@@ -4,15 +4,17 @@ import React, { useState } from "react";
 import { Modal, Icon, Form, Button } from "semantic-ui-react";
 
 const LogInModal = (props) => {
-  const { setActiveUser } = props;
+  // const { setActiveUser } = props;
   const [nestedIsOpen, setNestedIsOpen] = useState(false);
 
   const login = (e) => {
     e.preventDefault();
+    localStorage.setItem("current_user_id", "1");
+    window.location.reload();
 
-    fetch(`http://localhost:3000/users/1`)
-      .then((resp) => resp.json())
-      .then((data) => setActiveUser(data));
+    // fetch(`http://localhost:3000/users/1`)
+    //   .then((resp) => resp.json())
+    //   .then((data) => setActiveUser(data));
   };
 
   return (
