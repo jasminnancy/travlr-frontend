@@ -4,13 +4,13 @@ import React from "react";
 import SingleTrip from "./SingleTrip";
 
 //images
-import DefaultTripPhoto from "../photos/default-trip-photo.jpg";
+import DefaultTripPhoto from "../../photos/default-trip-photo.jpg";
 
 //styling
 import { Button } from "semantic-ui-react";
 
 const Trips = (props) => {
-  const { activeUser, setSelectedTrip, setActiveUser } = props;
+  const { activeUser, setActiveUser } = props;
 
   const createNewTrip = () => {
     fetch("http://localhost:3000/trips/", {
@@ -42,11 +42,7 @@ const Trips = (props) => {
       <Button fluid onClick={createNewTrip} content="Create a New Trip" />
       <br />
       {activeUser.trips.map((trip) => (
-        <SingleTrip
-          key={trip.id}
-          setSelectedTrip={setSelectedTrip}
-          trip={trip}
-        />
+        <SingleTrip key={trip.id} trip={trip} />
       ))}
     </div>
   );

@@ -46,12 +46,12 @@ const Navigation = (props) => {
         <Menu.Item
           name="trips"
           onClick={() => handlePageClick("/trips")}
-          active={activeTab === "/trips"}
+          active={activeTab.includes("/trips")}
         />
         <Menu.Item
           name="luggage"
           onClick={() => handlePageClick("/luggage")}
-          active={activeTab === "/luggage"}
+          active={activeTab.includes("/luggage")}
         />
         <Menu.Menu position="right">
           <Menu.Item>

@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation/Navigation";
 import Footer from "./components/Navigation/Footer";
 import HomeView from "./views/HomeView";
 import TripsView from "./views/TripsView";
+import SingleTripView from "./views/SingleTripView";
 import LuggageView from "./views/PageNotFound";
 import PageNotFound from "./views/PageNotFound";
 
@@ -60,6 +61,11 @@ const App = () => {
                 setActiveUser={setActiveUser}
               />
             )}
+          />
+          <Route
+            exact
+            path="/trips/:id"
+            render={() => <SingleTripView activeUser={activeUser} />}
           />
           <Route
             exact

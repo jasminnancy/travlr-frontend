@@ -1,9 +1,3 @@
-handleBackClick = () => {
-  this.setState({
-    selectedTrip: [],
-  });
-};
-
 handleTripEditClick = (trip, values) => {
   debugger;
   fetch(TRIP_URL + `/${trip.id}`, {
@@ -28,18 +22,6 @@ handleTripEditClick = (trip, values) => {
       });
       alert("Your trip has been updated!");
     });
-};
-
-handleDeleteClick = (e, trip) => {
-  e.preventDefault();
-
-  fetch(TRIP_URL + `/${trip.id}`, {
-    method: "DELETE",
-  }).then((resp) => resp.json(), this.props.handleRemovedTrip(trip));
-
-  this.setState({
-    selectedTrip: [],
-  });
 };
 
 handleTripUpdatedEvents = (type, newItem) => {

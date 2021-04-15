@@ -13,7 +13,10 @@ export const formatTime = (time) => {
 };
 
 export const formatDate = (date) => {
-  let splitDate = date.split("-");
-  let formatted = splitDate[1] + "/" + splitDate[2] + "/" + splitDate[0];
-  return formatted;
+  if (date) {
+    let splitDate = date.split("-");
+    let formatted = splitDate[1] + "/" + splitDate[2] + "/" + splitDate[0];
+    return formatted;
+  }
+  return "N/A";
 };

@@ -1,9 +1,15 @@
 import React from "react";
-import TransportTiny from "./TransportTiny";
-import HotelTiny from "./HotelTiny";
-import PlaceTiny from "./PlaceTiny";
-import EventTiny from "./EventTiny";
-import BagTiny from "./BagTiny";
+import history from "../Shared/history";
+
+//components
+import TransportTiny from "../TransportTiny";
+import HotelTiny from "../HotelTiny";
+import PlaceTiny from "../PlaceTiny";
+import EventTiny from "../EventTiny";
+import BagTiny from "../BagTiny";
+import { formatDate } from "../Shared/utils";
+
+//styling
 import {
   Button,
   Card,
@@ -17,9 +23,26 @@ import {
 } from "semantic-ui-react";
 
 const SingleTripDetails = (props) => {
+  const { trip, setTrip } = props;
+
+  const handleGoBack = () => {
+    setTrip(null);
+    history.push("/trips");
+  };
+
+  const handleDeleteClick = (trip) => {
+    fetch(`http://localhost:3000/trips/${trip.id}`, {
+      method: "DELETE",
+    }).then((resp) => resp.json());
+
+    handleGoBack();
+  };
+
+  if (!trip) return null;
+
   return (
     <div>
-      <Button fluid onClick={props.handleBackClick}>
+      <Button fluid onClick={handleGoBack}>
         Go Back
       </Button>
       <br />
@@ -30,19 +53,19 @@ const SingleTripDetails = (props) => {
               <Grid.Row>
                 <Grid.Column width={3} />
                 <Grid.Column width={9}>
-                  <Card.Header as="h3">{props.trip.title}</Card.Header>
+                  <Card.Header as="h3">{trip.title}</Card.Header>
                 </Grid.Column>
                 <Grid.Column width={4} />
               </Grid.Row>
 
               <Grid.Row textAlign="left">
                 <Grid.Column width={11}>
-                  <Message size="large" className="trip-details">
-                    {props.trip.description}
+                  <Message size="large" style={{ height: "100%" }}>
+                    {trip.description}
                   </Message>
                 </Grid.Column>
                 <Grid.Column width={5}>
-                  <Image src={props.trip.photo} />
+                  <Image src={trip.photo} />
                   <List divided relaxed>
                     <List.Item>
                       <div className="padding">
@@ -51,19 +74,19 @@ const SingleTripDetails = (props) => {
                           name="money bill alternate outline"
                           size="large"
                         />{" "}
-                        ${props.trip.budget}
+                        ${trip.budget}
                       </div>
                     </List.Item>
                     <List.Item>
                       <div className="padding">
                         <List.Icon color="black" name="sign in" size="large" />{" "}
-                        {props.formatDate(props.trip.start_date)}
+                        {formatDate(trip.start_date)}
                       </div>
                     </List.Item>
                     <List.Item>
                       <div className="padding">
                         <List.Icon color="black" name="sign out" size="large" />{" "}
-                        {props.formatDate(props.trip.end_date)}
+                        {formatDate(trip.end_date)}
                       </div>
                     </List.Item>
                   </List>
@@ -74,20 +97,18 @@ const SingleTripDetails = (props) => {
                 <Grid.Column>
                   <Message>
                     <AddButton
-                      trip={props.trip}
+                      trip={trip}
                       name="transportations"
                       handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                     />
                     <Message.Header content="Flights/Transportation" />
-                    {props.trip.transportations.length > 0 ? (
-                      props.trip.transportations.map((transport) => (
+                    {trip.transportations ? (
+                      trip.transportations.map((transport, i) => (
                         <TransportTiny
-                          key={transport.id}
+                          key={i}
                           transport={transport}
                           transportEdit={props.transportEdit}
                           handleDeletedTransport={props.handleDeletedTransport}
-                          formatTime={props.formatTime}
-                          formatDate={props.formatDate}
                         />
                       ))
                     ) : (
@@ -99,20 +120,18 @@ const SingleTripDetails = (props) => {
                 <Grid.Column>
                   <Message>
                     <AddButton
-                      trip={props.trip}
+                      trip={trip}
                       name="hotels"
                       handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                     />
                     <Message.Header content="Hotels" />
-                    {props.trip.hotels.length > 0 ? (
-                      props.trip.hotels.map((hotel) => (
+                    {trip.hotels ? (
+                      trip.hotels.map((hotel, i) => (
                         <HotelTiny
-                          key={hotel.id}
+                          key={i}
                           hotel={hotel}
                           hotelEdit={props.hotelEdit}
                           handleDeletedHotel={props.handleDeletedHotel}
-                          formatTime={props.formatTime}
-                          formatDate={props.formatDate}
                         />
                       ))
                     ) : (
@@ -126,15 +145,15 @@ const SingleTripDetails = (props) => {
                 <Grid.Column>
                   <Message>
                     <AddButton
-                      trip={props.trip}
+                      trip={trip}
                       name="places"
                       handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                     />
                     <Message.Header content="Places" />
-                    {props.trip.places.length > 0 ? (
-                      props.trip.places.map((place) => (
+                    {trip.places ? (
+                      trip.places.map((place, i) => (
                         <PlaceTiny
-                          key={place.id}
+                          key={i}
                           place={place}
                           placeEdit={props.placeEdit}
                           handleDeletedPlace={props.handleDeletedPlace}
@@ -150,15 +169,15 @@ const SingleTripDetails = (props) => {
                 <Grid.Column>
                   <Message>
                     <AddButton
-                      trip={props.trip}
+                      trip={trip}
                       name="events"
                       handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                     />
                     <Message.Header content="Events" />
-                    {props.trip.events.length > 0 ? (
-                      props.trip.events.map((event) => (
+                    {trip.events ? (
+                      trip.events.map((event, i) => (
                         <EventTiny
-                          key={event.id}
+                          key={i}
                           event={event}
                           eventEdit={props.eventEdit}
                           handleDeletedEvent={props.handleDeletedEvent}
@@ -174,15 +193,15 @@ const SingleTripDetails = (props) => {
                 <Grid.Column>
                   <Message>
                     <AddBagButton
-                      trip={props.trip}
+                      trip={trip}
                       name="carryons"
                       createCarryOn={props.createCarryOn}
                       handleTripUpdatedEvents={props.handleTripUpdatedEvents}
                     />
                     <Message.Header content="Bags" />
-                    {props.trip.carryons.length > 0 ? (
-                      props.trip.carryons.map((bag) => (
-                        <BagTiny key={bag.id} bag={bag} />
+                    {trip.carryons ? (
+                      trip.carryons.map((bag, i) => (
+                        <BagTiny key={i} bag={bag} />
                       ))
                     ) : (
                       <br />
@@ -196,19 +215,12 @@ const SingleTripDetails = (props) => {
                   <List divided horizontal>
                     <List.Item>
                       <EditModal
-                        trip={props.trip}
+                        trip={trip}
                         handleTripEditClick={props.handleTripEditClick}
                       />
                     </List.Item>
-                    <List.Item>
-                      <a
-                        href=""
-                        onClick={(e) => {
-                          props.handleDeleteClick(e, props.trip);
-                        }}
-                      >
-                        Delete
-                      </a>
+                    <List.Item onClick={() => handleDeleteClick(trip)}>
+                      <a href="">Delete</a>
                     </List.Item>
                   </List>
                 </Grid.Column>
