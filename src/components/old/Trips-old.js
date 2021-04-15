@@ -1,12 +1,3 @@
-import React from "react";
-import SingleTrip from "./SingleTrip";
-import SingleTripDetails from "./SingleTripDetails";
-import Mountains from "../photos/mountains.jpg";
-import Boys from "../photos/boys.jpg";
-import Milan from "../photos/italy.jpg";
-import DefaultTripPhoto from "../photos/default-trip-photo.jpg";
-import { Grid, Dimmer, Segment, Icon, Header, Button } from "semantic-ui-react";
-
 handleBackClick = () => {
   this.setState({
     selectedTrip: [],

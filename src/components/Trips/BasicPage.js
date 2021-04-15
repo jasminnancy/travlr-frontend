@@ -2,6 +2,12 @@ import React from "react";
 
 //components
 import Sidebar from "../Shared/Sidebar";
+import SingleTrip from "../Trips/SingleTrip";
+
+//images
+import Mountains from "../photos/mountains.jpg";
+import Boys from "../photos/boys.jpg";
+import Milan from "../photos/italy.jpg";
 
 //styling
 import { Dimmer, Segment, Grid, Header, Icon, Button } from "semantic-ui-react";
@@ -17,8 +23,8 @@ const BasicPage = () => {
           <Grid.Column width={12}>
             <Button fluid content="Create a New Trip" />
             <br />
-            {defaultUser.trips.map((trip) => (
-              <SingleTrip key={trip.id} trip={trip} />
+            {defaultUser.trips.map((trip, i) => (
+              <SingleTrip key={i} trip={trip} />
             ))}
           </Grid.Column>
         </Grid>

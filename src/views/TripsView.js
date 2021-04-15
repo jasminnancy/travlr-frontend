@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 //components
 import Sidebar from "../components/Shared/Sidebar";
@@ -23,7 +23,7 @@ const TripsView = (props) => {
           <Sidebar activeUser={activeUser} />
         </Grid.Column>
         <Grid.Column width={12}>
-          {!selectedTrip.length ? (
+          {selectedTrip.length ? (
             <Trips
               setActiveUser={setActiveUser}
               activeUser={activeUser}
