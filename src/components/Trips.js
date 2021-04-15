@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Shared/Sidebar";
 import SingleTrip from "./SingleTrip";
 import SingleTripDetails from "./SingleTripDetails";
 import Mountains from "../photos/mountains.jpg";

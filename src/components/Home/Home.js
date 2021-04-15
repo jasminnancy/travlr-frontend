@@ -1,7 +1,7 @@
 import React from "react";
 
 //components
-import Sidebar from "../Sidebar";
+import Sidebar from "../Shared/Sidebar";
 
 //styling
 import { Grid } from "semantic-ui-react";

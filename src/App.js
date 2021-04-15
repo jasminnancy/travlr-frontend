@@ -12,6 +12,7 @@ import PageNotFound from "./views/PageNotFound";
 
 //styling
 import "./App.css";
+import { Loader } from "semantic-ui-react";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,8 @@ const App = () => {
       });
   }, [activeUser]);
 
+  if (loading) return <Loader active />;
+
   return (
     <div className="App">
       <Router history={history}>
@@ -46,9 +49,7 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={() => (
-              <HomeView loading={loading} activeUser={activeUser} />
-            )}
+            render={() => <HomeView activeUser={activeUser} />}
           />
           <Route
             exact
@@ -58,7 +59,9 @@ const App = () => {
           <Route
             exact
             path="/luggage"
-            render={() => <LuggageView activeUser={activeUser} />}
+            render={() => (
+              <LuggageView loading={loading} activeUser={activeUser} />
+            )}
           />
           <Route path="/" render={() => <PageNotFound />} />
         </Switch>

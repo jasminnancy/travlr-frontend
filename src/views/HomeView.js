@@ -2,16 +2,13 @@ import React from "react";
 
 //components
 import Home from "../components/Home/Home";
-import BasicPage from "../components/Home/BasicPage";
-
-//styling
-import { Loader } from "semantic-ui-react";
+import BasicPage from "../components/Shared/BasicPage";
 
 const HomeView = (props) => {
-  const { activeUser, loading } = props;
+  const { activeUser } = props;
 
   if (!activeUser) {
-    return loading ? <Loader active /> : <BasicPage />;
+    return <BasicPage />;
   }
 
   return <Home activeUser={activeUser} />;
