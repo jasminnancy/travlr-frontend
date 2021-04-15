@@ -54,7 +54,12 @@ const App = () => {
           <Route
             exact
             path="/trips"
-            render={() => <TripsView activeUser={activeUser} />}
+            render={() => (
+              <TripsView
+                activeUser={activeUser}
+                setActiveUser={setActiveUser}
+              />
+            )}
           />
           <Route
             exact
