@@ -14,6 +14,7 @@ import PageNotFound from "./views/PageNotFound";
 import "./App.css";
 
 const App = () => {
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(window.location.pathname);
   const [activeUser, setActiveUser] = useState(null);
 
@@ -22,10 +23,14 @@ const App = () => {
 
     let userId = localStorage.getItem("current_user_id");
     if (!userId || activeUser) return;
+    setLoading(true);
 
     fetch(`http://localhost:3000/users/${userId}`)
       .then((resp) => resp.json())
-      .then((data) => setActiveUser(data));
+      .then((data) => {
+        setLoading(false);
+        setActiveUser(data);
+      });
   }, [activeUser]);
 
   return (
@@ -42,7 +47,7 @@ const App = () => {
             exact
             path="/"
             render={() => (
-              <HomeView activeUser={activeUser} setActiveTab={setActiveTab} />
+              <HomeView loading={loading} activeUser={activeUser} />
             )}
           />
           <Route
