@@ -8,7 +8,7 @@ import SingleTripDetails from "../components/Trips/SingleTripDetails";
 import { Grid } from "semantic-ui-react";
 
 const SingleTripView = (props) => {
-  const { activeUser } = props;
+  const { activeUser, setActiveUser } = props;
   const [trip, setTrip] = useState(null);
 
   useEffect(() => {
@@ -28,7 +28,12 @@ const SingleTripView = (props) => {
           <Sidebar activeUser={activeUser} />
         </Grid.Column>
         <Grid.Column width={12}>
-          <SingleTripDetails trip={trip} setTrip={setTrip} />
+          <SingleTripDetails
+            activeUser={activeUser}
+            setActiveUser={setActiveUser}
+            trip={trip}
+            setTrip={setTrip}
+          />
         </Grid.Column>
       </Grid>
     </div>

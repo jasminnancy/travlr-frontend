@@ -29,7 +29,7 @@ const Trips = (props) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        let trips = [...activeUser.trips, data];
+        let trips = [data, ...activeUser.trips];
         setActiveUser({
           ...activeUser,
           trips,

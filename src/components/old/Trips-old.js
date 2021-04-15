@@ -1,38 +1,3 @@
-handleTripEditClick = (trip, values) => {
-  debugger;
-  fetch(TRIP_URL + `/${trip.id}`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      title: values.title,
-      description: values.description,
-      budget: values.budget,
-      start_date: values.start_date,
-      end_date: values.end_date,
-      photo: values.photo,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      this.setState({
-        selectedTrip: data,
-      });
-      alert("Your trip has been updated!");
-    });
-};
-
-handleTripUpdatedEvents = (type, newItem) => {
-  let trip = { ...this.state.selectedTrip };
-  trip[type].push(newItem);
-
-  this.setState({
-    selectedTrip: trip,
-  });
-};
-
 handleDeletedTransport = (e, transport) => {
   e.preventDefault();
 
@@ -232,29 +197,5 @@ eventEdit = (event, values) => {
         selectedTrip: tripCopy,
       });
       alert("Your trip has been updated!");
-    });
-};
-
-createCarryOn = (bag, trip) => {
-  fetch("http://localhost:3000/carryons", {
-    method: "POST",
-    body: JSON.stringify({
-      luggage_id: bag,
-      trip_id: trip,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      let tripCopy = { ...this.state.selectedTrip };
-      let carryons = tripCopy.carryons.push(data);
-      tripCopy.carryons = carryons;
-
-      this.setState({
-        selectedTrip: tripCopy,
-      });
     });
 };
