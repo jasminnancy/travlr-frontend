@@ -2,11 +2,12 @@ import React from "react";
 import history from "../Shared/history";
 
 //styling
+import withStyles from "react-jss";
 import { Menu, Header, Icon, Button } from "semantic-ui-react";
 import LogInModal from "./LoginModal";
 
 const Navigation = (props) => {
-  const { activeTab, activeUser, setActiveTab, setActiveUser } = props;
+  const { classes, activeTab, activeUser, setActiveTab, setActiveUser } = props;
 
   const handleLogOut = () => {
     localStorage.clear();
@@ -24,7 +25,7 @@ const Navigation = (props) => {
         <Menu.Menu>
           <Menu.Item
             onClick={() => handlePageClick("/")}
-            className="header-icon"
+            className={classes.logoSection}
           >
             <Header as="h2">
               <Icon name="map signs" color="brown" />
@@ -69,4 +70,14 @@ const Navigation = (props) => {
   );
 };
 
-export default Navigation;
+const styles = {
+  logoSection: {
+    marginLeft: "-15px !important",
+    marginBottom: "-10px !important",
+    "&:hover": {
+      borderColor: "transparent !important",
+    },
+  },
+};
+
+export default withStyles(styles)(Navigation);

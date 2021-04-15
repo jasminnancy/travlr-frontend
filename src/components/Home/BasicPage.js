@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //images
 import MainImage from "../../photos/homepage.jpg";
@@ -19,6 +19,24 @@ import {
 
 const BasicPage = (props) => {
   const { classes } = props;
+  const columns = [
+    {
+      src: Suitcase2,
+      header: "Track",
+      subheader: "how far your bags have travelled",
+    },
+    {
+      src: Event1,
+      header: "Add",
+      subheader: "fun events and places to see",
+    },
+    {
+      src: Money1,
+      header: "Budget",
+      subheader: "your entire trip automatically",
+    },
+  ];
+  const [raised, setRaised] = useState({ 0: false, 1: false, 2: false });
 
   return (
     <div>
@@ -52,35 +70,26 @@ const BasicPage = (props) => {
       <div className="ui divider"></div>
 
       <Grid centered columns={3} padded>
-        <Grid.Column>
-          <Segment>
-            <Image fluid rounded src={Suitcase2} />
-            <Header as="h1" textAlign="center">
-              Track
-              <Header.Subheader>
-                how far your bags have travelled
-              </Header.Subheader>
-            </Header>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment>
-            <Image fluid rounded src={Event1} />
-            <Header as="h1" textAlign="center">
-              Add
-              <Header.Subheader>fun events and places to see</Header.Subheader>
-            </Header>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment>
-            <Image fluid rounded src={Money1} />
-            <Header as="h1" textAlign="center">
-              Budget
-              <Header.Subheader>your entire trip easily</Header.Subheader>
-            </Header>
-          </Segment>
-        </Grid.Column>
+        {columns.map((col, i) => (
+          <Grid.Column
+            key={i}
+            onMouseOver={() =>
+              setRaised({
+                ...raised,
+                [i]: true,
+              })
+            }
+            onMouseLeave={() => setRaised({ ...raised, [i]: false })}
+          >
+            <Segment raised={raised[i]}>
+              <Image fluid rounded src={col.src} />
+              <Header as="h1" textAlign="center">
+                {col.header}
+                <Header.Subheader>{col.subheader}</Header.Subheader>
+              </Header>
+            </Segment>
+          </Grid.Column>
+        ))}
       </Grid>
 
       <div className="ui divider"></div>
@@ -90,7 +99,7 @@ const BasicPage = (props) => {
 
 const styles = {
   statsSpacing: {
-    marginTop: "15px !important",
+    marginTop: "18px !important",
   },
 };
 
