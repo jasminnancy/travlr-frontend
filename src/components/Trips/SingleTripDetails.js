@@ -8,7 +8,7 @@ import { formatDate } from "../Shared/utils";
 import AddButton from "../Shared/AddButton";
 import AddBagButton from "./AddBagButton";
 import TripEditModal from "./TripEditModal";
-import TransportTiny from "../TransportTiny";
+import TransportChip from "../Shared/Chips/TransportChip";
 import HotelTiny from "../HotelTiny";
 import PlaceTiny from "../PlaceTiny";
 import EventTiny from "../EventTiny";
@@ -157,8 +157,9 @@ const SingleTripDetails = (props) => {
                     />
                     {trip.transportations ? (
                       trip.transportations.map((transport, i) => (
-                        <TransportTiny
+                        <TransportChip
                           key={i}
+                          trip={trip}
                           transport={transport}
                           transportEdit={props.transportEdit}
                           handleDelete={handleDelete}
