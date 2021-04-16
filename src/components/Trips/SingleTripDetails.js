@@ -1,6 +1,9 @@
 import React from "react";
 import history from "../Shared/history";
 
+//utils
+import { formatDate } from "../Shared/utils";
+
 //components
 import AddButton from "../Shared/AddButton";
 import AddBagButton from "./AddBagButton";
@@ -10,7 +13,6 @@ import HotelTiny from "../HotelTiny";
 import PlaceTiny from "../PlaceTiny";
 import EventTiny from "../EventTiny";
 import BagTiny from "../BagTiny";
-import { formatDate } from "../Shared/utils";
 
 //styling
 import { Button, Card, Grid, Image, Message, List } from "semantic-ui-react";
@@ -59,6 +61,17 @@ const SingleTripDetails = (props) => {
     };
 
     setTrip(updatedTrip);
+  };
+
+  const handleDelete = (e, item, url, name, trip) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3000/${url}/${item.id}`, {
+      method: "DELETE",
+    }).then((resp) => resp.json());
+
+    let updatedItems = trip[`${name}`].filter((i) => i.id !== item.id);
+    handleUpdate(name, updatedItems);
   };
 
   const handleTripDelete = (trip) => {
@@ -148,7 +161,7 @@ const SingleTripDetails = (props) => {
                           key={i}
                           transport={transport}
                           transportEdit={props.transportEdit}
-                          handleDeletedTransport={props.handleDeletedTransport}
+                          handleDelete={handleDelete}
                         />
                       ))
                     ) : (
@@ -174,7 +187,7 @@ const SingleTripDetails = (props) => {
                           key={i}
                           hotel={hotel}
                           hotelEdit={props.hotelEdit}
-                          handleDeletedHotel={props.handleDeletedHotel}
+                          handleDelete={handleDelete}
                         />
                       ))
                     ) : (
@@ -202,7 +215,7 @@ const SingleTripDetails = (props) => {
                           key={i}
                           place={place}
                           placeEdit={props.placeEdit}
-                          handleDeletedPlace={props.handleDeletedPlace}
+                          handleDelete={handleDelete}
                           formatTime={props.formatTime}
                         />
                       ))
@@ -229,7 +242,7 @@ const SingleTripDetails = (props) => {
                           key={i}
                           event={event}
                           eventEdit={props.eventEdit}
-                          handleDeletedEvent={props.handleDeletedEvent}
+                          handleDelete={handleDelete}
                           formatTime={props.formatTime}
                         />
                       ))
@@ -264,7 +277,12 @@ const SingleTripDetails = (props) => {
                 <Grid.Column width={16}>
                   <List divided horizontal>
                     <List.Item>
-                      <TripEditModal trip={trip} setTrip={setTrip} />
+                      <TripEditModal
+                        trip={trip}
+                        setTrip={setTrip}
+                        activeUser={activeUser}
+                        setActiveUser={setActiveUser}
+                      />
                     </List.Item>
                     <List.Item onClick={() => handleTripDelete(trip)}>
                       <a>Delete</a>

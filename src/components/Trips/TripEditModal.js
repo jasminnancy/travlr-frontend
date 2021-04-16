@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import history from "../Shared/history";
 
 //styling
 import { Modal, Form } from "semantic-ui-react";
 
 const TripEditModal = (props) => {
-  const { trip, setTrip } = props;
+  const { trip, setTrip, activeUser, setActiveUser } = props;
+  const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
     title: trip.title,
     budget: trip.budget,
@@ -43,7 +45,16 @@ const TripEditModal = (props) => {
       .then((resp) => resp.json())
       .then((data) => {
         setTrip(data);
-        alert("Your trip has been updated!");
+        setOpen(false);
+
+        let updatedTrips = activeUser.trips.map((trip) => {
+          if (trip.id !== data.id) return trip;
+          return data;
+        });
+        setActiveUser({
+          ...activeUser,
+          trips: updatedTrips,
+        });
       });
   };
 
@@ -52,9 +63,10 @@ const TripEditModal = (props) => {
       size="small"
       dimmer="blurring"
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      trigger={<a>Edit Trip Info</a>}
+      trigger={<a onClick={() => setOpen(true)}>Edit Trip Info</a>}
       closeIcon
       closeOnDimmerClick
+      open={open}
     >
       <Modal.Header>{trip.title}</Modal.Header>
       <Modal.Content>

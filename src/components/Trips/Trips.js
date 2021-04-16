@@ -41,9 +41,15 @@ const Trips = (props) => {
     <div>
       <Button fluid onClick={createNewTrip} content="Create a New Trip" />
       <br />
-      {activeUser.trips.map((trip) => (
-        <SingleTrip key={trip.id} trip={trip} />
-      ))}
+      {activeUser.trips
+        .sort(
+          (a, b) =>
+            new Date(b.start_date).setHours(0, 0, 0, 0) -
+            new Date(a.start_date).setHours(0, 0, 0, 0)
+        )
+        .map((trip) => (
+          <SingleTrip key={trip.id} trip={trip} />
+        ))}
     </div>
   );
 };
