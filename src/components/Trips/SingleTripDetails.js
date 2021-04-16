@@ -9,7 +9,7 @@ import AddButton from "../Shared/AddButton";
 import AddBagButton from "./AddBagButton";
 import TripEditModal from "./TripEditModal";
 import TransportChip from "../Shared/Chips/TransportChip";
-import HotelTiny from "../HotelTiny";
+import HotelChip from "../Shared/Chips/HotelChip";
 import PlaceTiny from "../PlaceTiny";
 import EventTiny from "../EventTiny";
 import BagTiny from "../BagTiny";
@@ -184,8 +184,9 @@ const SingleTripDetails = (props) => {
                     />
                     {trip.hotels ? (
                       trip.hotels.map((hotel, i) => (
-                        <HotelTiny
+                        <HotelChip
                           key={i}
+                          trip={trip}
                           hotel={hotel}
                           hotelEdit={props.hotelEdit}
                           handleDelete={handleDelete}

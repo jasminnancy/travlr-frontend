@@ -64,6 +64,7 @@ const TripEditModal = (props) => {
       dimmer="blurring"
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
       trigger={<a onClick={() => setOpen(true)}>Edit Trip Info</a>}
+      onClose={() => setOpen(false)}
       closeIcon
       closeOnDimmerClick
       open={open}

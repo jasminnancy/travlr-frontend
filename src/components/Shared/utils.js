@@ -20,3 +20,17 @@ export const formatDate = (date) => {
   }
   return "N/A";
 };
+
+export const handleChange = (id, value, setState) => {
+  setState({
+    [id]: value,
+  });
+};
+
+export const transportOptions = [
+  { id: "transport_type", text: "Flight", value: "flight" },
+  { id: "transport_type", text: "Bus", value: "bus" },
+  { id: "transport_type", text: "Car", value: "car" },
+  { id: "transport_type", text: "Train", value: "train" },
+  { id: "transport_type", text: "Other", value: "other" },
+];

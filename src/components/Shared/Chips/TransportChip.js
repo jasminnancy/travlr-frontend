@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { formatDate, formatTime } from "../../Shared/utils";
+import {
+  formatDate,
+  formatTime,
+  handleChange,
+  transportOptions,
+} from "../../Shared/utils";
 
 //styling
 import { Segment, Header, Modal, Form, Grid, Icon } from "semantic-ui-react";
@@ -33,70 +38,71 @@ const TransportChip = (props) => {
       : "plane";
   }
 
-  const handleChange = (e) => {
-    if (e.currentTarget.id === "transport_type") {
-      setValues({
-        transport_type: e.currentTarget.innerText,
-      });
-    } else {
-      setValues({
-        [e.target.id]: e.target.value,
-      });
-    }
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
 
     transportEdit(transport, values);
   };
 
+  const modalTrigger = (
+    <Segment raised>
+      <Header as="h4">{transport.name}</Header>
+      <br />
+      <Grid columns={3} divided>
+        <Grid.Row>
+          <Grid.Column>
+            <b>
+              <u>Details</u>
+            </b>{" "}
+            <br />
+            <Icon name={iconName} /> {transport.total_miles} mi. <br />$
+            {transport.cost}
+            <br />
+            {transport.company}
+          </Grid.Column>
+          <Grid.Column>
+            <b>
+              <u>Start Date</u>
+            </b>{" "}
+            <br />
+            {formatDate(transport.starting_date)} <br />
+            {formatTime(transport.starting_time)}
+          </Grid.Column>
+          <Grid.Column>
+            <b>
+              <u>End Date</u>
+            </b>{" "}
+            <br />
+            {formatDate(transport.ending_date)} <br />
+            {formatTime(transport.ending_time)}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
+  );
+
   return (
     <Modal
       size="small"
       dimmer="blurring"
-      trigger={
-        <Segment raised>
-          <Header as="h4">{transport.name}</Header>
-          <br />
-          <Grid columns={3} divided>
-            <Grid.Row>
-              <Grid.Column>
-                <b>
-                  <u>Details</u>
-                </b>{" "}
-                <br />
-                <Icon name={iconName} /> {transport.total_miles} mi. <br />$
-                {transport.cost}
-                <br />
-                {transport.company}
-              </Grid.Column>
-              <Grid.Column>
-                <b>
-                  <u>Start Date</u>
-                </b>{" "}
-                <br />
-                {formatDate(transport.starting_date)} <br />
-                {formatTime(transport.starting_time)}
-              </Grid.Column>
-              <Grid.Column>
-                <b>
-                  <u>End Date</u>
-                </b>{" "}
-                <br />
-                {formatDate(transport.ending_date)} <br />
-                {formatTime(transport.ending_time)}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-      }
+      trigger={modalTrigger}
       closeIcon
       closeOnDimmerClick
     >
       <Modal.Header>{transport.name}</Modal.Header>
       <Modal.Content>
-        <Form onSubmit={submitHandler} onChange={handleChange}>
+        <Form
+          onSubmit={submitHandler}
+          onChange={(e) =>
+            handleChange(
+              e.currentTarget.id === "transport_type"
+                ? e.currentTarget.id
+                : e.target.id,
+              e.target.value,
+              setValues
+            )
+          }
+        >
           <Form.Input width="16" id="name" label="Name" value={values.name} />
           <Form.Group>
             <Form.Input
@@ -108,11 +114,19 @@ const TransportChip = (props) => {
             <Form.Select
               width="6"
               label="Type"
-              options={options}
+              options={transportOptions}
               placeholder={
                 transport.transport_type ? transport.transport_type : "Type..."
               }
-              onChange={handleChange}
+              onChange={(e) =>
+                handleChange(
+                  e.currentTarget.id === "transport_type"
+                    ? e.currentTarget.id
+                    : e.target.id,
+                  e.target.value,
+                  setValues
+                )
+              }
             />
           </Form.Group>
           <Form.Group>
@@ -204,13 +218,5 @@ const TransportChip = (props) => {
     </Modal>
   );
 };
-
-const options = [
-  { id: "transport_type", text: "Flight", value: "flight" },
-  { id: "transport_type", text: "Bus", value: "bus" },
-  { id: "transport_type", text: "Car", value: "car" },
-  { id: "transport_type", text: "Train", value: "train" },
-  { id: "transport_type", text: "Other", value: "other" },
-];
 
 export default TransportChip;
