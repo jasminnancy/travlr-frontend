@@ -21,6 +21,11 @@ export const formatDate = (date) => {
   return "N/A";
 };
 
+export const createDate = (date) => {
+  let formattedDate = date ? new Date(date) : new Date();
+  return formattedDate.setHours(0, 0, 0, 0);
+};
+
 export const handleChange = (id, value, setState) => {
   setState({
     [id]: value,
