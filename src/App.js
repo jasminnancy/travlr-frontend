@@ -79,7 +79,7 @@ const App = () => {
               <LuggageView loading={loading} activeUser={activeUser} />
             )}
           />
-          <Route path="/" render={() => <PageNotFound />} />
+          <Route path="*" render={() => <PageNotFound />} />
         </Switch>
         <Footer />
       </Router>

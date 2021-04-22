@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //components
 import SingleTrip from "./SingleTrip";
@@ -7,10 +7,21 @@ import SingleTrip from "./SingleTrip";
 import DefaultTripPhoto from "../../photos/default-trip-photo.jpg";
 
 //styling
-import { Button } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
 
 const Trips = (props) => {
   const { activeUser, setActiveUser } = props;
+  const [orderedTrips, setOrderedTrips] = useState([]);
+
+  useEffect(() => {
+    setOrderedTrips(
+      activeUser.trips.sort(
+        (a, b) =>
+          new Date(b.start_date).setHours(0, 0, 0, 0) -
+          new Date(a.start_date).setHours(0, 0, 0, 0)
+      )
+    );
+  }, [activeUser.trips]);
 
   const createNewTrip = () => {
     fetch("http://localhost:3000/trips/", {
@@ -41,15 +52,28 @@ const Trips = (props) => {
     <div>
       <Button fluid onClick={createNewTrip} content="Create a New Trip" />
       <br />
-      {activeUser.trips
-        .sort(
-          (a, b) =>
-            new Date(b.start_date).setHours(0, 0, 0, 0) -
-            new Date(a.start_date).setHours(0, 0, 0, 0)
-        )
-        .map((trip) => (
-          <SingleTrip key={trip.id} trip={trip} />
-        ))}
+      {orderedTrips.map((trip) => {
+        if (
+          !trip.start_date ||
+          new Date(trip.start_date).setHours(0, 0, 0, 0) >=
+            new Date().setHours(0, 0, 0, 0)
+        ) {
+          return <SingleTrip key={trip.id} trip={trip} />;
+        }
+        return null;
+      })}
+      <div style={{ marginTop: "40px", width: "100%", textAlign: "center" }}>
+        <Header size="large">Past Trips</Header>
+      </div>
+      {orderedTrips.map((trip) => {
+        if (
+          new Date(trip.start_date).setHours(0, 0, 0, 0) <
+          new Date().setHours(0, 0, 0, 0)
+        ) {
+          return <SingleTrip key={trip.id} trip={trip} />;
+        }
+        return null;
+      })}
     </div>
   );
 };
