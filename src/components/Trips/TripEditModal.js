@@ -97,13 +97,13 @@ const TripEditModal = (props) => {
               id="start_date"
               label="Start Date"
               type="date"
-              value={values.start_date}
+              value={values.start_date || ""}
             />
             <Form.Input
               id="end_date"
               label="End Date"
               type="date"
-              value={values.end_date}
+              value={values.end_date || ""}
             />
             <Form.Input id="photo" label="Photo URL" />
           </Form.Group>

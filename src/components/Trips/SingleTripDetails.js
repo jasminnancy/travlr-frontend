@@ -111,7 +111,7 @@ const SingleTripDetails = (props) => {
               <Grid.Row textAlign="left">
                 <Grid.Column width={11}>
                   <Message size="large" style={{ height: "100%" }}>
-                    {trip.description}
+                    {trip.description || "No Description Added..."}
                   </Message>
                 </Grid.Column>
                 <Grid.Column width={5}>

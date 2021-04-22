@@ -45,9 +45,9 @@ const SingleTrip = (props) => {
               <Card.Header as="h3">{trip.title}</Card.Header>
               <Message
                 size="large"
-                style={{ height: "125px", overflow: "hidden" }}
+                style={{ height: "125px", overflow: "hidden", color: "grey" }}
               >
-                {trip.description}
+                {trip.description || "No Description Added..."}
               </Message>
             </Grid.Column>
             <Grid.Column

@@ -22,6 +22,13 @@ export const formatDate = (date) => {
 };
 
 export const createDate = (date) => {
+  //if no date, returns a year 1000 years in the future
+  //this sets all non-dated trips to the front of the array
+  if (date === null) {
+    let year = new Date().getFullYear();
+    return new Date(`${year + 1000}-12-31`).setHours(0, 0, 0, 0);
+  }
+
   let formattedDate = date ? new Date(date) : new Date();
   return formattedDate.setHours(0, 0, 0, 0);
 };
