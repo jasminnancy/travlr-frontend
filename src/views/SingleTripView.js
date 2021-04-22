@@ -14,8 +14,11 @@ const SingleTripView = (props) => {
   useEffect(() => {
     if (activeUser) {
       let id = window.location.pathname.split("/")[2];
-      let trip = activeUser.trips.filter((trip) => trip.id.toString() === id);
-      setTrip(trip[0]);
+      fetch(`http://localhost:3000/trips/${id}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+          setTrip(data);
+        });
     }
   }, [activeUser]);
 

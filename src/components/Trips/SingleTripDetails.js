@@ -25,32 +25,6 @@ const SingleTripDetails = (props) => {
     history.push("/trips");
   };
 
-  const createCarryOn = (bagId) => {
-    fetch("http://localhost:3000/carryons", {
-      method: "POST",
-      body: JSON.stringify({
-        luggage_id: bagId,
-        trip_id: trip.id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        let updatedTrip = {
-          ...trip,
-          carryons: {
-            ...trip.carryons,
-            data,
-          },
-        };
-
-        setTrip(updatedTrip);
-      });
-  };
-
   const handleUpdate = (name, newItem) => {
     let updatedNestedItem = trip[`${name}`]
       ? [...trip[`${name}`], newItem]
@@ -63,15 +37,18 @@ const SingleTripDetails = (props) => {
     setTrip(updatedTrip);
   };
 
-  const handleDelete = (e, item, url, name, trip) => {
+  const handleDelete = (e, item, name, trip) => {
     e.preventDefault();
-
-    fetch(`http://localhost:3000/${url}/${item.id}`, {
+    fetch(`http://localhost:3000/${name}/${item.id}`, {
       method: "DELETE",
-    }).then((resp) => resp.json());
+    });
 
-    let updatedItems = trip[`${name}`].filter((i) => i.id !== item.id);
-    handleUpdate(name, updatedItems);
+    let updatedItems = trip[name].filter((i) => i.id !== item.id);
+    let updatedTrip = {
+      ...trip,
+      [name]: updatedItems,
+    };
+    setTrip(updatedTrip);
   };
 
   const handleTripDelete = (trip) => {
@@ -152,7 +129,7 @@ const SingleTripDetails = (props) => {
                       handleUpdate={handleUpdate}
                     />
                     <Message.Header
-                      content="Flights/Transportation"
+                      content="Transportation"
                       style={{ marginTop: "2.5px", marginLeft: "40px" }}
                     />
                     {trip.transportations ? (
@@ -258,7 +235,8 @@ const SingleTripDetails = (props) => {
                   <Message>
                     <AddBagButton
                       bags={activeUser.luggages}
-                      createCarryOn={createCarryOn}
+                      trip={trip}
+                      setTrip={setTrip}
                     />
                     <Message.Header
                       content="Bags"

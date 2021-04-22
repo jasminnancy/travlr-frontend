@@ -54,9 +54,10 @@ const TransportChip = (props) => {
             <b>
               <u>Details</u>
             </b>{" "}
+            <br />$ {transport.cost || 0}
             <br />
-            <Icon name={iconName} /> {transport.total_miles} mi. <br />$
-            {transport.cost}
+            {transport.total_miles &&
+              <Icon name={iconName} /> + `${transport.total_miles} mi.`}
             <br />
             {transport.company}
           </Grid.Column>
@@ -109,7 +110,7 @@ const TransportChip = (props) => {
               width="10"
               id="company"
               label="Company"
-              value={values.company}
+              value={values.company || ""}
             />
             <Form.Select
               width="6"
@@ -135,28 +136,28 @@ const TransportChip = (props) => {
               id="starting_date"
               label="Start Date"
               type="date"
-              value={values.starting_date}
+              value={values.starting_date || ""}
             />
             <Form.Input
               width="4"
               id="starting_time"
               label="Start Time"
               type="time"
-              value={values.starting_time}
+              value={values.starting_time || ""}
             />
             <Form.Input
               width="4"
               id="ending_date"
               label="End Date"
               type="date"
-              value={values.ending_date}
+              value={values.ending_date || ""}
             />
             <Form.Input
               width="4"
               id="ending_time"
               label="End Time"
               type="time"
-              value={values.ending_time}
+              value={values.ending_time || ""}
             />
           </Form.Group>
           <Form.Group>
@@ -164,13 +165,13 @@ const TransportChip = (props) => {
               width="8"
               id="starting_location"
               label="Starting City"
-              value={values.starting_location}
+              value={values.starting_location || ""}
             />
             <Form.Input
               width="8"
               id="destination"
               label="Destination"
-              value={values.destination}
+              value={values.destination || ""}
             />
           </Form.Group>
           <Form.Group>
@@ -178,28 +179,28 @@ const TransportChip = (props) => {
               width="6"
               id="confirmation_code"
               label="Trip Confirmation Code"
-              value={values.confirmation_code}
+              value={values.confirmation_code || ""}
             />
             <Form.Input
               width="5"
               id="cost"
               label="Total Cost"
               type="number"
-              value={values.cost}
+              value={values.cost || ""}
             />
             <Form.Input
               width="5"
               id="total_miles"
               label="Total Miles"
               type="number"
-              value={values.total_miles}
+              value={values.total_miles || ""}
             />
           </Form.Group>
           <Form.TextArea
             width="16"
             id="notes"
             label="Notes"
-            value={values.notes}
+            value={values.notes || ""}
           />
           <Form.Button type="submit" floated="right">
             Submit
@@ -207,9 +208,8 @@ const TransportChip = (props) => {
         </Form>
         <br />
         <a
-          onClick={(e) =>
-            handleDelete(e, transport, "transports", "transports", trip)
-          }
+          href=""
+          onClick={(e) => handleDelete(e, transport, "transportations", trip)}
         >
           Delete
         </a>

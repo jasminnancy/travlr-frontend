@@ -139,7 +139,7 @@ const HotelChip = (props) => {
         <a
           href=""
           onClick={(e) => {
-            handleDelete(e, hotel, "hotels", "hotels", trip);
+            handleDelete(e, hotel, "hotels", trip);
           }}
         >
           Delete
