@@ -7,10 +7,10 @@ import {
 } from "../../Shared/utils";
 
 //styling
-import { Segment, Header, Modal, Form, Grid, Icon } from "semantic-ui-react";
+import { Card, Header, Modal, Form, Grid, Icon } from "semantic-ui-react";
 
 const TransportChip = (props) => {
-  const { trip, transport, transportEdit, handleDelete } = props;
+  const { trip, transport, transportEdit, handleDelete, setTrip } = props;
   const [values, setValues] = useState({
     name: transport.name,
     transport_type: transport.transport_type,
@@ -40,46 +40,48 @@ const TransportChip = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     transportEdit(transport, values);
   };
 
   const modalTrigger = (
-    <Segment raised>
-      <Header as="h4">{transport.name}</Header>
-      <br />
-      <Grid columns={3} divided>
-        <Grid.Row>
-          <Grid.Column>
-            <b>
-              <u>Details</u>
-            </b>{" "}
-            <br />$ {transport.cost || 0}
-            <br />
-            {transport.total_miles &&
-              <Icon name={iconName} /> + `${transport.total_miles} mi.`}
-            <br />
-            {transport.company}
-          </Grid.Column>
-          <Grid.Column>
-            <b>
-              <u>Start Date</u>
-            </b>{" "}
-            <br />
-            {formatDate(transport.starting_date)} <br />
-            {formatTime(transport.starting_time)}
-          </Grid.Column>
-          <Grid.Column>
-            <b>
-              <u>End Date</u>
-            </b>{" "}
-            <br />
-            {formatDate(transport.ending_date)} <br />
-            {formatTime(transport.ending_time)}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
+    <Card fluid>
+      <Card.Content>
+        <Header as="h4" style={{ marginBottom: "10px" }}>
+          {transport.name}
+        </Header>
+        <Grid columns={3} divided style={{ color: "black" }}>
+          <Grid.Row>
+            <Grid.Column>
+              <b>
+                <u>Details</u>
+              </b>{" "}
+              <br />$ {transport.cost || 0}
+              <br />
+              {transport.total_miles &&
+                <Icon name={iconName} /> + `${transport.total_miles} mi.`}
+              <br />
+              {transport.company}
+            </Grid.Column>
+            <Grid.Column>
+              <b>
+                <u>Start Date</u>
+              </b>{" "}
+              <br />
+              {formatDate(transport.starting_date)} <br />
+              {formatTime(transport.starting_time)}
+            </Grid.Column>
+            <Grid.Column>
+              <b>
+                <u>End Date</u>
+              </b>{" "}
+              <br />
+              {formatDate(transport.ending_date)} <br />
+              {formatTime(transport.ending_time)}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Card.Content>
+    </Card>
   );
 
   return (
@@ -90,7 +92,7 @@ const TransportChip = (props) => {
       closeIcon
       closeOnDimmerClick
     >
-      <Modal.Header>{transport.name}</Modal.Header>
+      <Modal.Header>Editing: {transport.name}</Modal.Header>
       <Modal.Content>
         <Form
           onSubmit={submitHandler}
@@ -209,7 +211,9 @@ const TransportChip = (props) => {
         <br />
         <a
           href=""
-          onClick={(e) => handleDelete(e, transport, "transportations", trip)}
+          onClick={(e) =>
+            handleDelete(e, transport, "transportations", trip, setTrip)
+          }
         >
           Delete
         </a>

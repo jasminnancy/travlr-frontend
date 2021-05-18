@@ -11,7 +11,7 @@ const AddButton = (props) => {
       method: "POST",
       body: JSON.stringify({
         trip_id: id,
-        name: "Click to Edit",
+        name: `Click to Edit`,
       }),
       headers: {
         "Content-Type": "application/json",

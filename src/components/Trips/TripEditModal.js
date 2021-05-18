@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import history from "../Shared/history";
 
 //styling
-import { Modal, Form } from "semantic-ui-react";
+import { Modal, Form, Button } from "semantic-ui-react";
 
 const TripEditModal = (props) => {
   const { trip, setTrip, activeUser, setActiveUser } = props;
@@ -63,7 +62,11 @@ const TripEditModal = (props) => {
       size="small"
       dimmer="blurring"
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      trigger={<a onClick={() => setOpen(true)}>Edit Trip Info</a>}
+      trigger={
+        <Button basic onClick={() => setOpen(true)}>
+          Edit Trip Info
+        </Button>
+      }
       onClose={() => setOpen(false)}
       closeIcon
       closeOnDimmerClick

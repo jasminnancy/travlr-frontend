@@ -1,59 +1,49 @@
 import React, { useState } from "react";
-import { formatDate, handleChange } from "../utils";
+import { handleChange } from "../utils";
 
 //styling
-import { Segment, Header, Form, Modal, Grid } from "semantic-ui-react";
+import { Segment, Header, Grid, Modal, Form } from "semantic-ui-react";
 
-const HotelChip = (props) => {
-  const { trip, hotel, hotelEdit, handleDelete, setTrip } = props;
+const EventChip = (props) => {
+  const { trip, event, eventEdit, handleDelete, setTrip } = props;
   const [values, setValues] = useState({
-    name: hotel.name,
-    cost: hotel.cost,
-    starting_date: hotel.starting_date,
-    ending_date: hotel.ending_date,
-    address1: hotel.address1,
-    address2: hotel.address2,
-    city: hotel.city,
-    us_state: hotel.us_state,
-    zip: hotel.zip,
-    country: hotel.country,
-    notes: hotel.notes,
+    name: "",
+    cost: 0,
+    address1: "",
+    address2: "",
+    city: "",
+    us_state: "",
+    zip: "",
+    country: "",
+    notes: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    hotelEdit(hotel, values);
+    eventEdit(event, values);
   };
 
   const modalTrigger = (
     <Segment raised>
-      <Header as="h4">{hotel.name}</Header>
+      <Header as="h4">{event.name}</Header>
       <br />
-      <Grid columns={3} divided>
+      <Grid columns={2} divided>
         <Grid.Row>
+          <Grid.Column>
+            <b>
+              <u>Cost</u>
+            </b>{" "}
+            <br />${event.cost || 0}
+            <br />
+          </Grid.Column>
           <Grid.Column>
             <b>
               <u>Details</u>
             </b>{" "}
-            <br />${hotel.cost || 0}
             <br />
-            {hotel.city}
-            {hotel.us_state ? ", " + hotel.us_state : ""} <br />
-            {hotel.country}
-          </Grid.Column>
-          <Grid.Column>
-            <b>
-              <u>Check-In</u>
-            </b>{" "}
-            <br />
-            {formatDate(hotel.starting_date)} <br />
-          </Grid.Column>
-          <Grid.Column>
-            <b>
-              <u>Check-Out</u>
-            </b>{" "}
-            <br />
-            {formatDate(hotel.ending_date)} <br />
+            {event.city}
+            {event.us_state ? ", " + event.us_state : ""} <br />
+            {event.country}
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -68,7 +58,7 @@ const HotelChip = (props) => {
       closeIcon
       closeOnDimmerClick
     >
-      <Modal.Header>{hotel.name}</Modal.Header>
+      <Modal.Header>{event.name}</Modal.Header>
       <Modal.Content>
         <Form
           onSubmit={handleSubmit}
@@ -77,22 +67,6 @@ const HotelChip = (props) => {
           <Form.Group>
             <Form.Input width="10" id="name" label="Name" value={values.name} />
             <Form.Input width="6" id="cost" label="Cost" value={values.cost} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width="8"
-              id="starting_date"
-              label="Check-In Date"
-              type="date"
-              value={values.starting_date}
-            />
-            <Form.Input
-              width="8"
-              id="ending_date"
-              label="Check-Out Date"
-              type="date"
-              value={values.ending_date}
-            />
           </Form.Group>
           <Form.Group>
             <Form.Input
@@ -137,7 +111,7 @@ const HotelChip = (props) => {
         <br />
         <a
           href=""
-          onClick={(e) => handleDelete(e, hotel, "hotels", trip, setTrip)}
+          onClick={(e) => handleDelete(e, event, "events", trip, setTrip)}
         >
           Delete
         </a>
@@ -147,4 +121,4 @@ const HotelChip = (props) => {
   );
 };
 
-export default HotelChip;
+export default EventChip;

@@ -2,17 +2,18 @@ import React from "react";
 import history from "../Shared/history";
 
 //utils
-import { formatDate } from "../Shared/utils";
+import { formatDate, handleDelete } from "../Shared/utils";
 
 //components
 import AddButton from "../Shared/AddButton";
 import AddBagButton from "./AddBagButton";
 import TripEditModal from "./TripEditModal";
+import TripDeleteModal from "./TripDeleteModal";
 import TransportChip from "../Shared/Chips/TransportChip";
 import HotelChip from "../Shared/Chips/HotelChip";
-import PlaceTiny from "../PlaceTiny";
-import EventTiny from "../EventTiny";
-import BagTiny from "../BagTiny";
+import PlaceChip from "../Shared/Chips/PlaceChip";
+import EventChip from "../Shared/Chips/EventChip";
+import BagChip from "../Shared/Chips/BagChip";
 
 //styling
 import { Button, Card, Grid, Image, Message, List } from "semantic-ui-react";
@@ -34,20 +35,6 @@ const SingleTripDetails = (props) => {
       [name]: updatedNestedItem,
     };
 
-    setTrip(updatedTrip);
-  };
-
-  const handleDelete = (e, item, name, trip) => {
-    e.preventDefault();
-    fetch(`http://localhost:3000/${name}/${item.id}`, {
-      method: "DELETE",
-    });
-
-    let updatedItems = trip[name].filter((i) => i.id !== item.id);
-    let updatedTrip = {
-      ...trip,
-      [name]: updatedItems,
-    };
     setTrip(updatedTrip);
   };
 
@@ -82,7 +69,14 @@ const SingleTripDetails = (props) => {
                 <Grid.Column width={9}>
                   <Card.Header as="h3">{trip.title}</Card.Header>
                 </Grid.Column>
-                <Grid.Column width={4} />
+                <Grid.Column width={4}>
+                  <TripEditModal
+                    trip={trip}
+                    setTrip={setTrip}
+                    activeUser={activeUser}
+                    setActiveUser={setActiveUser}
+                  />
+                </Grid.Column>
               </Grid.Row>
 
               <Grid.Row textAlign="left">
@@ -137,6 +131,7 @@ const SingleTripDetails = (props) => {
                         <TransportChip
                           key={i}
                           trip={trip}
+                          setTrip={setTrip}
                           transport={transport}
                           transportEdit={props.transportEdit}
                           handleDelete={handleDelete}
@@ -164,6 +159,7 @@ const SingleTripDetails = (props) => {
                         <HotelChip
                           key={i}
                           trip={trip}
+                          setTrip={setTrip}
                           hotel={hotel}
                           hotelEdit={props.hotelEdit}
                           handleDelete={handleDelete}
@@ -190,12 +186,13 @@ const SingleTripDetails = (props) => {
                     />
                     {trip.places ? (
                       trip.places.map((place, i) => (
-                        <PlaceTiny
+                        <PlaceChip
                           key={i}
+                          trip={trip}
+                          setTrip={setTrip}
                           place={place}
                           placeEdit={props.placeEdit}
                           handleDelete={handleDelete}
-                          formatTime={props.formatTime}
                         />
                       ))
                     ) : (
@@ -217,12 +214,13 @@ const SingleTripDetails = (props) => {
                     />
                     {trip.events ? (
                       trip.events.map((event, i) => (
-                        <EventTiny
+                        <EventChip
                           key={i}
+                          trip={trip}
+                          setTrip={setTrip}
                           event={event}
                           eventEdit={props.eventEdit}
                           handleDelete={handleDelete}
-                          formatTime={props.formatTime}
                         />
                       ))
                     ) : (
@@ -243,8 +241,8 @@ const SingleTripDetails = (props) => {
                       style={{ marginTop: "2.5px", marginLeft: "40px" }}
                     />
                     {trip.carryons ? (
-                      trip.carryons.map((bag, i) => (
-                        <BagTiny key={i} bag={bag} />
+                      trip.carryons.map((carryon, i) => (
+                        <BagChip key={i} luggage={carryon.luggage} />
                       ))
                     ) : (
                       <br />
@@ -252,22 +250,12 @@ const SingleTripDetails = (props) => {
                   </Message>
                 </Grid.Column>
               </Grid.Row>
-
               <Grid.Row>
                 <Grid.Column width={16}>
-                  <List divided horizontal>
-                    <List.Item>
-                      <TripEditModal
-                        trip={trip}
-                        setTrip={setTrip}
-                        activeUser={activeUser}
-                        setActiveUser={setActiveUser}
-                      />
-                    </List.Item>
-                    <List.Item onClick={() => handleTripDelete(trip)}>
-                      <a>Delete</a>
-                    </List.Item>
-                  </List>
+                  <TripDeleteModal
+                    handleTripDelete={handleTripDelete}
+                    trip={trip}
+                  />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
