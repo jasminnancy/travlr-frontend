@@ -6,6 +6,8 @@ import { Card, Header } from "semantic-ui-react";
 const BagChip = (props) => {
   const { luggage } = props;
 
+  if (!luggage) return null;
+
   return (
     <Card>
       <Card.Content>

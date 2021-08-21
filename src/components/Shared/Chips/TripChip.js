@@ -6,6 +6,8 @@ import { Card, Popup, Image, Header } from "semantic-ui-react";
 const TripChip = (props) => {
   const { trip } = props;
 
+  if (!trip) return null;
+
   return (
     <Card>
       <Popup
