@@ -8,7 +8,8 @@ import Footer from "./components/Navigation/Footer";
 import HomeView from "./views/HomeView";
 import TripsView from "./views/TripsView";
 import SingleTripView from "./views/SingleTripView";
-import LuggageView from "./views/PageNotFound";
+import LuggageView from "./views/LuggageView";
+import SingleLuggageView from "./views/SingleLuggageView";
 import PageNotFound from "./views/PageNotFound";
 
 //styling
@@ -20,9 +21,9 @@ const App = () => {
   const [activeTab, setActiveTab] = useState(window.location.pathname);
   const [activeUser, setActiveUser] = useState(null);
 
+  // fetches user data once activeUser exists
   useEffect(() => {
     setActiveTab(window.location.pathname);
-
     let userId = localStorage.getItem("current_user_id");
     if (!userId || activeUser) return;
     setLoading(true);
@@ -35,6 +36,18 @@ const App = () => {
       });
   }, [activeUser]);
 
+  const handleAddedBag = (bag) => {
+    setActiveUser({ ...activeUser, luggages: [...activeUser.luggages, bag] });
+  };
+
+  const handleRemovedBag = (removedBag) => {
+    let updatedBags = [...activeUser.luggages].filter(
+      (trip) => trip.id !== removedBag.id
+    );
+    setActiveUser({ ...activeUser, luggages: updatedBags });
+  };
+
+  // don't render the App.js component when app is loading
   if (loading) return <Loader active />;
 
   return (
@@ -76,7 +89,20 @@ const App = () => {
             exact
             path="/luggage"
             render={() => (
-              <LuggageView loading={loading} activeUser={activeUser} />
+              <LuggageView
+                activeUser={activeUser}
+                handleAddedBag={handleAddedBag}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/luggage/:id"
+            render={() => (
+              <SingleLuggageView
+                activeUser={activeUser}
+                handleRemovedBag={handleRemovedBag}
+              />
             )}
           />
           <Route path="*" render={() => <PageNotFound />} />

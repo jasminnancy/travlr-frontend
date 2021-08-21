@@ -1,4 +1,5 @@
 import React from "react";
+import history from "../components/Shared/history";
 
 //imports
 import TripChip from "./Shared/Chips/TripChip";
@@ -16,9 +17,11 @@ import {
 } from "semantic-ui-react";
 
 const SingleBagDetails = (props) => {
+  const { bag, handleEditClick, handleDeleteClick } = props;
+
   return (
     <div>
-      <Button fluid onClick={props.handleBackClick}>
+      <Button fluid onClick={() => history.goBack()}>
         Go Back
       </Button>
       <br />
@@ -30,7 +33,7 @@ const SingleBagDetails = (props) => {
               <Grid.Row>
                 <Grid.Column width={3} />
                 <Grid.Column width={9}>
-                  <Card.Header as="h3">{props.bag.name}</Card.Header>
+                  <Card.Header as="h3">{bag.name}</Card.Header>
                 </Grid.Column>
                 <Grid.Column width={4} />
               </Grid.Row>
@@ -40,15 +43,15 @@ const SingleBagDetails = (props) => {
                   <Message size="large" className="trip-details">
                     <Card.Header
                       content={`Places this ${
-                        props.bag.luggage_type === "carry_on"
+                        bag.luggage_type === "carry_on"
                           ? "carry-on"
-                          : props.bag.luggage_type
+                          : bag.luggage_type
                       } has been:`}
                     />
                     <br />
                     <Card.Content>
                       <Card.Group itemsPerRow={4}>
-                        {props.bag.carryons.map((carryon) => (
+                        {bag.carryons.map((carryon) => (
                           <TripChip trip={carryon.trip} />
                         ))}
                       </Card.Group>
@@ -61,25 +64,21 @@ const SingleBagDetails = (props) => {
                     <List.Item>
                       <div className="padding">
                         <List.Icon color="black" name="road" size="large" />{" "}
-                        {props.bag.miles > 0
-                          ? props.bag.miles + " miles"
-                          : "0 miles"}
+                        {bag.miles > 0 ? bag.miles + " miles" : "0 miles"}
                       </div>
                     </List.Item>
                     <List.Item>
                       <div className="padding">
                         <List.Icon color="black" name="suitcase" size="large" />{" "}
-                        {props.bag.luggage_type
-                          ? props.bag.luggage_type.split("_").join("-")
+                        {bag.luggage_type
+                          ? bag.luggage_type.split("_").join("-")
                           : "suitcase"}
                       </div>
                     </List.Item>
                     <List.Item>
                       <div className="padding">
                         <List.Icon color="black" name="cube" size="large" />{" "}
-                        {props.bag.size
-                          ? props.bag.size + " liters"
-                          : "??? liters"}
+                        {bag.size ? bag.size + " liters" : "??? liters"}
                       </div>
                     </List.Item>
                   </List>
@@ -90,18 +89,10 @@ const SingleBagDetails = (props) => {
                 <Grid.Column width={16}>
                   <List divided horizontal>
                     <List.Item>
-                      <EditModal
-                        bag={props.bag}
-                        handleBagEditClick={props.handleBagEditClick}
-                      />
+                      <EditModal bag={bag} handleEditClick={handleEditClick} />
                     </List.Item>
                     <List.Item>
-                      <a
-                        href=""
-                        onClick={(e) => {
-                          props.handleDeleteClick(e, props.bag);
-                        }}
-                      >
+                      <a href="" onClick={(e) => handleDeleteClick(e, bag)}>
                         Delete
                       </a>
                     </List.Item>
@@ -154,6 +145,7 @@ class EditModal extends React.Component {
 
   submitHandler = (e) => {
     e.preventDefault();
+
     let selectedBag = { ...this.props.bag };
     this.props.handleBagEditClick(selectedBag, this.state);
   };
@@ -194,7 +186,7 @@ class EditModal extends React.Component {
                 label="Type"
                 options={options}
                 placeholder="Type..."
-                onChange={(e) => this.changeHandler(e)}
+                onChange={this.changeHandler}
               />
             </Form.Group>
             <Form.Button type="submit" floated="right">

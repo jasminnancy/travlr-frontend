@@ -16,22 +16,4 @@ const OldApp = () => {
       activeUser: { ...this.state.activeUser, trips: updatedTrips },
     });
   };
-
-  handleAddedBag = (bag) => {
-    let bags = [...this.state.activeUser.luggages];
-    bags.push(bag);
-
-    this.setState({
-      activeUser: { ...this.state.activeUser, luggages: bags },
-    });
-  };
-
-  handleRemovedBag = (removedBag) => {
-    let bags = [...this.state.activeUser.luggages];
-    let updatedBags = bags.filter((trip) => trip.id !== removedBag.id);
-
-    this.setState({
-      activeUser: { ...this.state.activeUser, luggages: updatedBags },
-    });
-  };
 };

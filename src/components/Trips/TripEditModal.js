@@ -5,6 +5,7 @@ import { Modal, Form, Button } from "semantic-ui-react";
 
 const TripEditModal = (props) => {
   const { trip, setTrip, activeUser, setActiveUser } = props;
+
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
     title: trip.title,
@@ -50,6 +51,7 @@ const TripEditModal = (props) => {
           if (trip.id !== data.id) return trip;
           return data;
         });
+
         setActiveUser({
           ...activeUser,
           trips: updatedTrips,
